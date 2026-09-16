@@ -1,0 +1,36 @@
+{
+  "policy_version": "2026-09-16",
+  "commercial_product": true,
+  "rule": "No dataset enters production-model training unless its dataset license and access terms permit the intended use or written permission is obtained.",
+  "datasets": {
+    "DENTEX": {
+      "modality": "panoramic_xray",
+      "targets": ["tooth_enumeration", "caries", "deep_caries", "periapical_lesion", "impacted_tooth"],
+      "license": "CC BY-NC-SA 4.0",
+      "commercial_training": "blocked_without_permission",
+      "source": "https://github.com/ibrahimethemhamamci/DENTEX"
+    },
+    "ToothFairy2": {
+      "modality": "cbct",
+      "targets": ["multi_structure_segmentation", "teeth", "jaw", "ian", "sinus", "implant_site_anatomy"],
+      "license": "CC BY-SA (dataset page)",
+      "commercial_training": "review_required",
+      "notes": "Signup required. Reconcile all challenge/access terms before commercial training.",
+      "source": "https://toothfairy2.grand-challenge.org/dataset/"
+    },
+    "AKUH_intraoral_caries_6313": {
+      "modality": "clinical_photo",
+      "targets": ["visible_caries"],
+      "commercial_training": "review_required",
+      "notes": "Publicly available via Zenodo; verify the Zenodo dataset license itself before training a commercial model.",
+      "source": "https://doi.org/10.1038/s41597-025-05647-9"
+    },
+    "MeMoSA": {
+      "modality": "oral_mucosa_photo",
+      "targets": ["oral_lesion_evidence", "referral_evidence"],
+      "commercial_training": "review_required",
+      "notes": "30,039 images; verify Workbench/data-access license and permissions before use in a commercial model.",
+      "source": "https://doi.org/10.1038/s41597-026-06998-7"
+    }
+  }
+}
