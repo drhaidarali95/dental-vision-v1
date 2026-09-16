@@ -1,0 +1,9 @@
+torch>=2.3
+torchvision>=0.18
+pycocotools>=2.0.7
+Pillow>=10.0
+numpy>=1.26
+pandas>=2.2
+scikit-learn>=1.4
+tqdm>=4.66
+PyYAML>=6.0
