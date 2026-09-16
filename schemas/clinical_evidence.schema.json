@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Dental Diagnostic Intelligence Clinical Evidence",
+  "type": "object",
+  "required": ["patient_case_id", "modalities", "findings", "clinician_confirmation_required"],
+  "properties": {
+    "patient_case_id": {"type": "string"},
+    "modalities": {"type": "array", "items": {"enum": ["radiograph_2d", "cbct_3d", "clinical_photo", "intraoral_scan_3d", "clinical_record"]}},
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["finding_id", "source_modality", "finding_type", "confidence", "provenance"],
+        "properties": {
+          "finding_id": {"type": "string"},
+          "source_modality": {"type": "string"},
+          "tooth": {"type": ["string", "null"]},
+          "site": {"type": ["string", "null"]},
+          "finding_type": {"type": "string"},
+          "value": {},
+          "units": {"type": ["string", "null"]},
+          "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+          "provenance": {"type": "object"},
+          "uncertainty": {"type": ["string", "null"]}
+        }
+      }
+    },
+    "differential_diagnoses": {"type": "array"},
+    "supported_diagnoses": {"type": "array"},
+    "missing_information": {"type": "array"},
+    "treatment_alternatives": {"type": "array"},
+    "implant_plan": {
+      "type": ["object", "null"],
+      "properties": {
+        "site": {"type": "string"},
+        "candidate_position": {"type": "object"},
+        "diameter_range_mm": {"type": "array", "items": {"type": "number"}, "minItems": 2, "maxItems": 2},
+        "length_range_mm": {"type": "array", "items": {"type": "number"}, "minItems": 2, "maxItems": 2},
+        "angulation": {"type": "object"},
+        "bone_dimensions": {"type": "object"},
+        "restorative_space": {"type": "object"},
+        "safety_distances": {"type": "object"},
+        "nearby_anatomy": {"type": "array"},
+        "uncertainty": {"type": "array"},
+        "missing_information": {"type": "array"},
+        "clinician_approved": {"const": false}
+      }
+    },
+    "clinician_confirmation_required": {"const": true}
+  }
+}
