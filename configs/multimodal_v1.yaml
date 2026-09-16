@@ -1,0 +1,67 @@
+project: dental-diagnostic-intelligence-v1
+objective: unified_multimodal_dental_diagnosis_and_treatment_planning
+
+modalities:
+  radiograph_2d:
+    inputs: [panoramic, bitewing, periapical, fmx]
+    tasks: [tooth_localization, tooth_numbering, caries, deep_caries, periapical_lesion, impacted_tooth, periodontal_bone_assessment]
+  cbct_3d:
+    inputs: [dicom, nifti, mha]
+    tasks: [tooth_segmentation, jaw_segmentation, inferior_alveolar_canal, maxillary_sinus, implant_existing, anatomy_measurement, implant_site_planning]
+  clinical_photo:
+    inputs: [intraoral_photo, extraoral_photo]
+    tasks: [caries_visual, soft_tissue_lesion, restoration_status, gingival_findings]
+  intraoral_scan_3d:
+    inputs: [stl, ply, obj]
+    tasks: [tooth_segmentation, tooth_numbering, missing_teeth, occlusal_geometry, restorative_space, implant_prosthetic_planning]
+  clinical_record:
+    inputs: [history, symptoms, medications, periodontal_chart, clinical_exam, tests, notes, prior_treatment]
+    tasks: [evidence_normalization, contraindication_screening, diagnostic_context]
+
+fusion:
+  output_schema: schemas/clinical_evidence.schema.json
+  stages:
+    - modality_specific_inference
+    - normalize_findings
+    - patient_level_evidence_fusion
+    - differential_diagnosis
+    - supported_diagnosis_with_uncertainty
+    - treatment_alternatives
+    - implant_planning_when_indicated
+    - clinician_confirmation
+
+implant_planning:
+  principle: prosthetically_driven
+  required_when_available: [cbct_3d, intraoral_scan_3d, clinical_record]
+  outputs: [site, candidate_position, diameter_range, length_range, angulation, bone_dimensions, restorative_space, safety_distances, nearby_anatomy, uncertainty, missing_information]
+  autonomous_approval: false
+
+datasets:
+  dentex:
+    modality: radiograph_2d
+    status: candidate
+    commercial_license_review_required: true
+  toothfairy2:
+    modality: cbct_3d
+    status: candidate
+    license: CC-BY-SA
+    access: signup_required
+  teeth3ds:
+    modality: intraoral_scan_3d
+    status: candidate
+    commercial_license_review_required: true
+  intraoral_caries_2025:
+    modality: clinical_photo
+    status: candidate
+    commercial_license_review_required: true
+  memosa:
+    modality: clinical_photo
+    status: candidate
+    commercial_license_review_required: true
+
+safety:
+  clinician_confirmation_required: true
+  preserve_provenance: true
+  expose_uncertainty: true
+  never_infer_unavailable_measurement: true
+  no_autonomous_implant_placement: true
