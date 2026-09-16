@@ -1,0 +1,19 @@
+{
+  "project": "Dental Vision Multimodal V1",
+  "modules": {
+    "xray": {"enabled": true, "tasks": ["tooth_localization", "tooth_numbering", "caries", "periapical_lesion", "impaction", "restorative_status", "periodontal_bone_evidence"]},
+    "cbct": {"enabled": true, "tasks": ["tooth_segmentation", "jaw_segmentation", "ian_segmentation", "sinus_segmentation", "lesion_evidence", "implant_site_anatomy"]},
+    "photo": {"enabled": true, "tasks": ["soft_tissue_evidence", "visible_caries_evidence", "restorative_evidence", "gingival_evidence", "oral_lesion_evidence"]},
+    "surface_scan": {"enabled": true, "tasks": ["tooth_geometry", "edentulous_site_geometry", "occlusal_geometry", "restorative_space", "prosthetic_axis"]},
+    "clinical_record": {"enabled": true, "tasks": ["history", "symptoms", "medications", "exam", "periodontal_chart", "prior_treatment"]},
+    "fusion": {"enabled": true, "strategy": "evidence_level_patient_fusion", "outputs": ["findings", "differential", "supported_diagnosis", "uncertainty", "missing_information", "treatment_alternatives"]},
+    "implant_planning": {"enabled": true, "inputs": ["cbct", "surface_scan", "photo", "clinical_record"], "outputs": ["candidate_position", "diameter", "length", "axis", "anatomic_distances", "bone_measurements", "restorative_space", "warnings"], "requires_clinician_confirmation": true}
+  },
+  "safety": {
+    "patient_level_split_required": true,
+    "provenance_required": true,
+    "confidence_required": true,
+    "autonomous_clinical_write": false,
+    "clinician_confirmation_required": true
+  }
+}
