@@ -1,12 +1,5 @@
 #!/usr/bin/env python3
-"""Download DENTEX files from the official Zenodo record.
-
-Usage:
-  python scripts/download_dentex.py --record 7812323 --out data/raw
-
-The script queries Zenodo record metadata, prints the record license and files,
-and downloads selected archives with streaming + MD5 verification when available.
-"""
+"""Download DENTEX files from the official Zenodo record."""
 import argparse, hashlib, json, pathlib, urllib.request
 
 
@@ -15,20 +8,34 @@ def get_json(url):
         return json.load(r)
 
 
+def normalize_md5(value):
+    """Zenodo may expose checksum as md5:<hex>, plain hex, or a dict."""
+    if isinstance(value, dict):
+        value = value.get("md5") or value.get("checksum") or ""
+    value = str(value or "").strip().lower()
+    if value.startswith("md5:"):
+        value = value.split(":", 1)[1]
+    return value if len(value) == 32 and all(c in "0123456789abcdef" for c in value) else None
+
+
 def download(url, dest, expected_md5=None):
     dest.parent.mkdir(parents=True, exist_ok=True)
     h = hashlib.md5()
-    with urllib.request.urlopen(url) as r, open(dest, "wb") as f:
-        while True:
-            chunk = r.read(1024 * 1024)
-            if not chunk:
-                break
-            f.write(chunk); h.update(chunk)
-    digest = h.hexdigest()
-    if expected_md5 and digest.lower() != expected_md5.lower():
+    try:
+        with urllib.request.urlopen(url) as r, open(dest, "wb") as f:
+            while True:
+                chunk = r.read(4 * 1024 * 1024)
+                if not chunk:
+                    break
+                f.write(chunk)
+                h.update(chunk)
+        digest = h.hexdigest()
+        if expected_md5 and digest.lower() != expected_md5.lower():
+            raise RuntimeError(f"MD5 mismatch for {dest.name}: {digest} != {expected_md5}")
+        print(f"Downloaded {dest} md5={digest}")
+    except Exception:
         dest.unlink(missing_ok=True)
-        raise RuntimeError(f"MD5 mismatch for {dest.name}: {digest} != {expected_md5}")
-    print(f"Downloaded {dest} md5={digest}")
+        raise
 
 
 def main():
@@ -47,10 +54,13 @@ def main():
             print(f"SKIP: {name} not present in this record")
             continue
         item = available[name]
-        checksum = item.get("checksum", "")
-        md5 = checksum.split(":", 1)[1] if checksum.startswith("md5:") else None
-        url = item.get("links", {}).get("self") or item.get("links", {}).get("content")
-        download(url, pathlib.Path(args.out) / name, md5)
+        expected_md5 = normalize_md5(item.get("checksum"))
+        links = item.get("links", {})
+        # Prefer the raw content endpoint; `self` may resolve to metadata/API content.
+        url = links.get("content") or links.get("self")
+        if not url:
+            raise RuntimeError(f"No download URL for {name}")
+        download(url, pathlib.Path(args.out) / name, expected_md5)
 
 if __name__ == "__main__":
     main()
