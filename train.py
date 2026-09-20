@@ -22,7 +22,7 @@ def main():
     p.add_argument("--annotations", required=True)
     p.add_argument("--epochs", type=int, default=20)
     p.add_argument("--batch-size", type=int, default=2)
-    p.add_argument("--lr", type=float, default=0.005)
+    p.add_argument("--lr", type=float, default=0.0025)
     p.add_argument("--output", default="artifacts/dental_vision_v1.pt")
     p.add_argument("--resume", default=None, help="Checkpoint to resume from if it exists")
     args = p.parse_args()
@@ -32,7 +32,11 @@ def main():
     loader = DataLoader(dataset, batch_size=args.batch_size, shuffle=True, num_workers=2, collate_fn=collate_fn)
     model = build_model(dataset.num_classes).to(device)
     optimizer = torch.optim.SGD([p for p in model.parameters() if p.requires_grad], lr=args.lr, momentum=0.9, weight_decay=5e-4)
-    scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=7, gamma=0.1)
+    scheduler = torch.optim.lr_scheduler.MultiStepLR(
+        optimizer,
+        milestones=[max(1, int(args.epochs * 0.60)), max(2, int(args.epochs * 0.85))],
+        gamma=0.1,
+    )
 
     out = Path(args.output)
     out.parent.mkdir(parents=True, exist_ok=True)
@@ -81,7 +85,7 @@ def main():
         torch.save(checkpoint, out)
         epoch_out = out.with_name(f"{out.stem}_epoch_{epoch+1:02d}{out.suffix}")
         torch.save(checkpoint, epoch_out)
-        print(f"epoch={epoch+1}/{args.epochs} loss={avg_loss:.4f} checkpoint={out}", flush=True)
+        print(f"epoch={epoch+1}/{args.epochs} loss={avg_loss:.4f} lr={optimizer.param_groups[0]['lr']:.6g} checkpoint={out}", flush=True)
 
     print(f"saved={out}")
 
