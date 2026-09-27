@@ -31,20 +31,9 @@ def ensure_model():
             if not chunk:
                 break
             dst.write(chunk)
-    with zipfile.ZipFile(zip_path) as z:
-        members = [n for n in z.namelist() if not n.endswith("/")]
-        if len(members) == 1:
-            with z.open(members[0]) as src, open(MODEL_PATH, "wb") as dst:
-                while True:
-                    chunk = src.read(1024 * 1024)
-                    if not chunk:
-                        break
-                    dst.write(chunk)
-        else:
-            z.extractall(pathlib.Path(MODEL_PATH).parent)
-            if not os.path.exists(MODEL_PATH):
-                raise RuntimeError("Downloaded archive did not contain expected model checkpoint")
-    os.remove(zip_path)
+    # The uploaded .zip is the PyTorch checkpoint container itself (renamed from .pth),
+    # not an outer archive containing a .pth file. Preserve its bytes as MODEL_PATH.
+    os.replace(zip_path, MODEL_PATH)
 
 ensure_model()
 checkpoint = torch.load(MODEL_PATH, map_location=DEVICE, weights_only=False)
