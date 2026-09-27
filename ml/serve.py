@@ -1,5 +1,6 @@
-import io, os
+import io, os, pathlib, zipfile
 from typing import Any
+from urllib.request import Request, urlopen
 
 import torch
 from fastapi import FastAPI, File, Header, HTTPException, UploadFile
@@ -9,10 +10,43 @@ from torchvision.models.detection.faster_rcnn import FastRCNNPredictor
 from torchvision.transforms.functional import pil_to_tensor
 
 MODEL_PATH = os.getenv("MODEL_PATH", "/app/models/harmony_detector_best.pth")
+MODEL_ZIP_URL = os.getenv("MODEL_ZIP_URL", "")
+HF_TOKEN = os.getenv("HF_TOKEN", "")
 API_KEY = os.getenv("HARMONY_MODEL_API_KEY", "")
 SCORE_THRESHOLD = float(os.getenv("SCORE_THRESHOLD", "0.50"))
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
+def ensure_model():
+    if os.path.exists(MODEL_PATH):
+        return
+    if not MODEL_ZIP_URL:
+        raise RuntimeError("Model missing and MODEL_ZIP_URL is not configured")
+    pathlib.Path(MODEL_PATH).parent.mkdir(parents=True, exist_ok=True)
+    zip_path = "/tmp/harmony_detector_best.zip"
+    headers = {"Authorization": f"Bearer {HF_TOKEN}"} if HF_TOKEN else {}
+    req = Request(MODEL_ZIP_URL, headers=headers)
+    with urlopen(req, timeout=300) as src, open(zip_path, "wb") as dst:
+        while True:
+            chunk = src.read(1024 * 1024)
+            if not chunk:
+                break
+            dst.write(chunk)
+    with zipfile.ZipFile(zip_path) as z:
+        members = [n for n in z.namelist() if not n.endswith("/")]
+        if len(members) == 1:
+            with z.open(members[0]) as src, open(MODEL_PATH, "wb") as dst:
+                while True:
+                    chunk = src.read(1024 * 1024)
+                    if not chunk:
+                        break
+                    dst.write(chunk)
+        else:
+            z.extractall(pathlib.Path(MODEL_PATH).parent)
+            if not os.path.exists(MODEL_PATH):
+                raise RuntimeError("Downloaded archive did not contain expected model checkpoint")
+    os.remove(zip_path)
+
+ensure_model()
 checkpoint = torch.load(MODEL_PATH, map_location=DEVICE, weights_only=False)
 classes = checkpoint.get("classes", ["__background__", "Cavity", "Fillings", "Implant", "Impacted Tooth"])
 model = fasterrcnn_resnet50_fpn_v2(weights=None, weights_backbone=None)
@@ -42,10 +76,11 @@ async def predict(file: UploadFile = File(...), authorization: str | None = Head
     tensor = pil_to_tensor(image).float().div(255.0).to(DEVICE)
     with torch.inference_mode():
         out = model([tensor])[0]
-    findings=[]
-    for box,label,score in zip(out["boxes"].cpu(),out["labels"].cpu(),out["scores"].cpu()):
-        confidence=float(score)
-        if confidence < SCORE_THRESHOLD: continue
-        x1,y1,x2,y2=[float(v) for v in box.tolist()]
-        findings.append({"category": classes[int(label)], "confidence": confidence, "bbox": {"x1":x1,"y1":y1,"x2":x2,"y2":y2}, "source":"harmony_detector_v1", "clinician_review_required": True})
-    return {"model":"harmony_detector_v1","threshold":SCORE_THRESHOLD,"image":{"width":image.width,"height":image.height},"findings":findings,"disclaimer":"AI-assisted detection; clinician review required."}
+    findings = []
+    for box, label, score in zip(out["boxes"].cpu(), out["labels"].cpu(), out["scores"].cpu()):
+        confidence = float(score)
+        if confidence < SCORE_THRESHOLD:
+            continue
+        x1, y1, x2, y2 = [float(v) for v in box.tolist()]
+        findings.append({"category": classes[int(label)], "confidence": confidence, "bbox": {"x1": x1, "y1": y1, "x2": x2, "y2": y2}, "source": "harmony_detector_v1", "clinician_review_required": True})
+    return {"model": "harmony_detector_v1", "threshold": SCORE_THRESHOLD, "image": {"width": image.width, "height": image.height}, "findings": findings, "disclaimer": "AI-assisted detection; clinician review required."}
