@@ -7,4 +7,4 @@ RUN mkdir -p /app/models
 ENV MODEL_PATH=/app/models/harmony_detector_best.pth
 ENV SCORE_THRESHOLD=0.50
 EXPOSE 8000
-CMD ["uvicorn","ml.serve:app","--host","0.0.0.0","--port","8000"]
+CMD ["/bin/sh","-c","uvicorn ml.serve:app --host 0.0.0.0 --port ${PORT:-8000}"]
