@@ -1,4 +1,4 @@
-import io, os, pathlib, zipfile
+import io, os, pathlib, gc
 from typing import Any
 from urllib.request import Request, urlopen
 
@@ -9,7 +9,7 @@ from torchvision.models.detection import fasterrcnn_resnet50_fpn_v2
 from torchvision.models.detection.faster_rcnn import FastRCNNPredictor
 from torchvision.transforms.functional import pil_to_tensor
 
-MODEL_PATH = os.getenv("MODEL_PATH", "/app/models/harmony_detector_best.pth")
+MODEL_PATH = os.getenv("MODEL_PATH", "/tmp/harmony_detector_best.pth")
 MODEL_ZIP_URL = os.getenv("MODEL_ZIP_URL", "")
 HF_TOKEN = os.getenv("HF_TOKEN", "")
 API_KEY = os.getenv("HARMONY_MODEL_API_KEY", "")
@@ -22,29 +22,30 @@ def ensure_model():
     if not MODEL_ZIP_URL:
         raise RuntimeError("Model missing and MODEL_ZIP_URL is not configured")
     pathlib.Path(MODEL_PATH).parent.mkdir(parents=True, exist_ok=True)
-    zip_path = "/tmp/harmony_detector_best.zip"
+    tmp = MODEL_PATH + ".download"
     headers = {"Authorization": f"Bearer {HF_TOKEN}"} if HF_TOKEN else {}
     req = Request(MODEL_ZIP_URL, headers=headers)
-    with urlopen(req, timeout=300) as src, open(zip_path, "wb") as dst:
-        while True:
-            chunk = src.read(1024 * 1024)
-            if not chunk:
-                break
+    with urlopen(req, timeout=300) as src, open(tmp, "wb") as dst:
+        while chunk := src.read(1024 * 1024):
             dst.write(chunk)
-    # The uploaded .zip is the PyTorch checkpoint container itself (renamed from .pth),
-    # not an outer archive containing a .pth file. Preserve its bytes as MODEL_PATH.
-    os.replace(zip_path, MODEL_PATH)
+    os.replace(tmp, MODEL_PATH)
 
 ensure_model()
-checkpoint = torch.load(MODEL_PATH, map_location=DEVICE, weights_only=False)
+# Load checkpoint on CPU, construct the exact trained architecture, then release
+# the duplicate checkpoint/state-dict memory before serving requests.
+checkpoint = torch.load(MODEL_PATH, map_location="cpu", weights_only=False)
 classes = checkpoint.get("classes", ["__background__", "Cavity", "Fillings", "Implant", "Impacted Tooth"])
+model_epoch = checkpoint.get("epoch")
+validation_loss = checkpoint.get("val_loss")
 model = fasterrcnn_resnet50_fpn_v2(weights=None, weights_backbone=None)
 in_features = model.roi_heads.box_predictor.cls_score.in_features
 model.roi_heads.box_predictor = FastRCNNPredictor(in_features, len(classes))
 model.load_state_dict(checkpoint["model"])
+del checkpoint
+gc.collect()
 model.to(DEVICE).eval()
 
-app = FastAPI(title="Harmony Dental Detector", version="1.0.0")
+app = FastAPI(title="Harmony Dental Detector", version="1.0.1")
 
 def authorize(authorization: str | None):
     if API_KEY and authorization != f"Bearer {API_KEY}":
@@ -52,7 +53,7 @@ def authorize(authorization: str | None):
 
 @app.get("/health")
 def health():
-    return {"ok": True, "device": str(DEVICE), "classes": classes, "model_epoch": checkpoint.get("epoch"), "validation_loss": checkpoint.get("val_loss")}
+    return {"ok": True, "device": str(DEVICE), "classes": classes, "model_epoch": model_epoch, "validation_loss": validation_loss}
 
 @app.post("/predict")
 async def predict(file: UploadFile = File(...), authorization: str | None = Header(default=None)) -> dict[str, Any]:
