@@ -13,3 +13,10 @@ Radiograph -> vision evidence extraction -> structured findings JSON -> downstre
 
 ## Status
 Repository initialized. Dataset licensing and provenance must be verified before training or commercial deployment. No clinical performance claims should be made without held-out validation.
+
+## Layout
+- `REGISTRY.md` - every dataset, model and outside code, with license and commercial status. Read first.
+- `AGENTS.md` - rules for keeping this package portable and sellable.
+- `panoramic_monai/` - MONAI panoramic findings + tooth-numbering models (Kaggle GPU training).
+- `cbct_toothfairy2/` - CBCT work; `kaggle_download/` fetches ToothFairy2 into a private Kaggle dataset.
+- `ml/`, `train.py`, `evaluate.py`, `src/`, `notebooks/` - original v1 Faster R-CNN detector.

@@ -1,0 +1,10 @@
+torch==2.4.1
+torchvision==0.19.1
+monai==1.4.0
+numpy>=1.26,<2.1
+pillow>=10.0
+pycocotools>=2.0.7
+fastapi>=0.110
+uvicorn[standard]>=0.29
+python-multipart>=0.0.9
+scipy>=1.11,<1.15
