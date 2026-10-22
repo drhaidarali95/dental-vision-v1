@@ -55,35 +55,65 @@ if ckpt:
 else:
     print("WARNING: no Checkpoints link found; fetching the dataset only.")
 
-out = Path("/kaggle/tmp/toothfairy2")
-out.mkdir(parents=True, exist_ok=True)
-for name, href in targets.items():
-    url = href if href.startswith("http") else BASE + href
-    dest = out / name
-    print(f"Downloading {name} ...")
-    with s.get(url, stream=True, timeout=120) as r:
-        r.raise_for_status()
-        if "text/html" in r.headers.get("Content-Type", ""):
-            sys.exit(f"{name}: got a web page instead of a file (login or link problem).")
-        total, done, last = int(r.headers.get("Content-Length", 0)), 0, 0
-        with open(dest, "wb") as f:
-            for chunk in r.iter_content(8 << 20):
-                f.write(chunk)
-                done += len(chunk)
-                if done - last > (1 << 30):
-                    last = done
-                    print(f"  {done / 1e9:.1f} / {total / 1e9:.1f} GB")
-    print(f"  done: {dest.stat().st_size / 1e9:.2f} GB")
-
 owner = subprocess.run(["kaggle", "config", "view"], capture_output=True, text=True).stdout
 owner = re.search(r"username:\s*(\S+)", owner).group(1)
-(out / "dataset-metadata.json").write_text(json.dumps({
-    "title": "toothfairy2", "id": f"{owner}/toothfairy2",
-    "licenses": [{"name": "CC-BY-SA-4.0"}],
-}))
-print("Uploading to a private Kaggle dataset (can take a while) ...")
-exists = subprocess.run(["kaggle", "datasets", "status", f"{owner}/toothfairy2"], capture_output=True).returncode == 0
-cmd = (["kaggle", "datasets", "version", "-p", str(out), "-m", "refresh"] if exists
-       else ["kaggle", "datasets", "create", "-p", str(out)])
-subprocess.run(cmd, check=True)
-print(f"Saved privately as https://www.kaggle.com/datasets/{owner}/toothfairy2")
+
+
+def download(url, dest):
+    # Resumable: on a dropped connection, wait and continue from the bytes we have.
+    total = None
+    for attempt in range(30):
+        have = dest.stat().st_size if dest.exists() else 0
+        if total and have >= total:
+            return
+        try:
+            headers = {"Range": f"bytes={have}-"} if have else {}
+            with s.get(url, stream=True, timeout=120, headers=headers) as r:
+                r.raise_for_status()
+                if "text/html" in r.headers.get("Content-Type", ""):
+                    sys.exit(f"{dest.name}: got a web page instead of a file (login or link problem).")
+                if have and r.status_code != 206:
+                    have = 0  # server ignored Range; start over
+                total = have + int(r.headers.get("Content-Length", 0))
+                last = have
+                with open(dest, "ab" if have else "wb") as f:
+                    for chunk in r.iter_content(8 << 20):
+                        f.write(chunk)
+                        have += len(chunk)
+                        if have - last > (1 << 30):
+                            last = have
+                            print(f"  {have / 1e9:.1f} / {total / 1e9:.1f} GB", flush=True)
+            if have >= total:
+                return
+        except requests.RequestException as e:
+            print(f"  connection dropped ({e.__class__.__name__}); resuming", flush=True)
+        time.sleep(min(300, 15 * (attempt + 1)))
+    sys.exit(f"Could not download {dest.name}")
+
+
+def save_dataset(folder, slug, title):
+    # Each download becomes its own private Kaggle dataset, then is deleted locally.
+    (folder / "dataset-metadata.json").write_text(json.dumps({
+        "title": title, "id": f"{owner}/{slug}", "licenses": [{"name": "CC-BY-SA-4.0"}],
+    }))
+    exists = subprocess.run(["kaggle", "datasets", "status", f"{owner}/{slug}"], capture_output=True).returncode == 0
+    cmd = (["kaggle", "datasets", "version", "-p", str(folder), "-m", "refresh"] if exists
+           else ["kaggle", "datasets", "create", "-p", str(folder)])
+    print(f"Saving {slug} privately (can take a while) ...", flush=True)
+    subprocess.run(cmd, check=True)
+    print(f"Saved: https://www.kaggle.com/datasets/{owner}/{slug}", flush=True)
+
+
+slugs = {"tf2_checkpoints.zip": ("toothfairy2-checkpoints", "toothfairy2-checkpoints"),
+         "ToothFairy2_Dataset.zip": ("toothfairy2", "toothfairy2")}
+for name in sorted(targets, key=lambda n: n != "tf2_checkpoints.zip"):  # small file first
+    slug, title = slugs[name]
+    href = targets[name]
+    folder = Path("/kaggle/tmp") / slug
+    folder.mkdir(parents=True, exist_ok=True)
+    print(f"Downloading {name} ...", flush=True)
+    download(href if href.startswith("http") else BASE + href, folder / name)
+    print(f"  done: {(folder / name).stat().st_size / 1e9:.2f} GB", flush=True)
+    save_dataset(folder, slug, title)
+    subprocess.run(["rm", "-rf", str(folder)])
+print("All done.")
