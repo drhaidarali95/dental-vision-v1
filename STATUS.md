@@ -1,11 +1,12 @@
 # Live status (updated automatically every 2 hours)
 
-Last update: 2026-10-30 09:40 UTC
+Last update: 2026-10-30 12:38 UTC
 
 ## Now
 - Done Oct 30, 05:05 UTC: DENTEX private copy; ToothFairy2 checkpoints (4.6 GB) and scans (26.1 GB) saved privately.
 - Done Oct 30, 08:28 UTC: panoramic v2 retrain. Clean test: findings 0.544 (v1 0.544), teeth 0.956 (v1 0.956). Degraded films: v2 0.546 vs v1 0.540. Kept v2 (near-tie; counts as round 1 without meaningful gain under the stopping rule). Saved privately as harmony-pano-models-v2.
-- Running since Oct 30, 08:34 UTC: periapical model (1,882 periapical X-rays; caries, badly decayed, root canal, crown, restoration). Expected done about Oct 30, 10:30 UTC.
+- Done Oct 30, ~10:40 UTC: periapical model v1. Held-out 54 films 0.517 (crown 0.87, restoration 0.75, caries 0.38, badly decayed 0.33, root canal 0.25). Saved privately as harmony-periapical-models-v1.
+- Running since Oct 30, 12:36 UTC: bitewing tooth numbering (8,292 bitewings, FDI 13-48). Expected done about Oct 30, 15:40 UTC.
 
 ## Queue (runs in this order, one GPU job at a time)
 1. Panoramic v2 (robust) - findings + tooth numbering.
@@ -34,6 +35,7 @@ ever called 100% accurate.
 | Panoramic tooth numbers | v1 | 0.96 | |
 | Panoramic findings | v2 | 0.54 (degraded 0.55) | deep caries 0.43, periapical 0.40, impacted 0.92 |
 | Panoramic tooth numbers | v2 | 0.96 | |
+| Periapical findings | v1 | 0.52 | crown 0.87, restoration 0.75, caries 0.38, badly decayed 0.33, root canal 0.25 |
 
 ## Watchdog log
 - Oct 30, 06:53 UTC: OK. Panoramic v2 retrain running (started 05:10, expected done ~10:40). No data/weights committed; registry, queue and dashboard on plan.

@@ -4,14 +4,14 @@
   python prep_coco.py --root /kaggle/input/dental-periapical-x-rays --out data/datalist.json
 
 The export's own splits are kept (Roboflow augments only its train split, so
-valid/test stay original films). "Normal" boxes are dropped: they mark healthy
-teeth, not findings.
+valid/test stay original films). "Normal" boxes (healthy teeth) and generic parent labels ("object", "Tooth")
+are dropped.
 """
 import argparse
 import json
 from pathlib import Path
 
-SKIP = {"normal"}
+SKIP = {"normal", "object", "tooth"}  # healthy-tooth marks and generic parent labels
 
 
 def load(split_dir: Path, classes: list[str]) -> list[dict]:

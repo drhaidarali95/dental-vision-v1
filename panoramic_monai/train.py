@@ -52,6 +52,22 @@ def degrade(img: Image.Image) -> Image.Image:
     return img
 
 
+def name_mirror(classes: list[str]):
+    """For any class list of FDI tooth numbers ("16", "26", ...): the index remap
+    for a left-right flip, or None when the classes aren't side-specific.
+    Raises if a tooth's mirror is missing, since a flip would then mislabel it."""
+    side = {"1": "2", "2": "1", "3": "4", "4": "3"}
+    fdi = [c for c in classes if len(c) == 2 and c.isdigit() and c[0] in side]
+    if not fdi:
+        return None
+    index = {c: i for i, c in enumerate(classes)}
+    table = [index.get(side[c[0]] + c[1], -1) if c in fdi else i for i, c in enumerate(classes)]
+    if -1 in table:
+        missing = [c for c, t in zip(classes, table) if t == -1]
+        raise SystemExit(f"tooth classes without a mirror tooth (flip would mislabel): {missing}")
+    return lambda i: table[i]
+
+
 class Films(Dataset):
     def __init__(self, items: list[dict], augment: bool, mirror=None):
         self.items = items
@@ -112,7 +128,7 @@ def main():
     classes = data["classes"]
     if not classes or not all(isinstance(c, str) for c in classes):
         raise SystemExit(f"bad class list in datalist: {classes}")
-    mirror = mirror_tooth if classes == TEETH else None
+    mirror = mirror_tooth if classes == TEETH else name_mirror(classes)
     train_items, val_items = data["train"], data["val"]
     drafts = []
     if args.drafts:
