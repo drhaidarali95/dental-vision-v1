@@ -31,3 +31,6 @@ ever called 100% accurate.
 |---|---|---|---|
 | Panoramic findings | v1 | 0.54 | impacted 0.92, caries 0.47, deep caries 0.41, periapical 0.39 |
 | Panoramic tooth numbers | v1 | 0.96 | |
+
+## Watchdog log
+- Oct 30, 06:53 UTC: OK. Panoramic v2 retrain running (started 05:10, expected done ~10:40). No data/weights committed; registry, queue and dashboard on plan.
