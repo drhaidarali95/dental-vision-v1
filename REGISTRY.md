@@ -43,6 +43,8 @@ CC BY 4.0).
 | v1-fasterrcnn | Detector served by `ml/serve.py` | v1-detector-data | Not in repo (`models/harmony_detector_best.pth`) | Exists; source data VERIFY |
 | panoramic-findings | MONAI RetinaNet, panoramic findings | DENTEX | Private Kaggle dataset `drhaidarali/harmony-pano-models-v1`, file `pano-findings-v1.pt` (sha256 8d142f23...296) | Trained 2026-10-22. Held-out test mAP@0.5 0.54 (impacted 0.92, caries 0.47, deep caries 0.41, periapical 0.39), 106 DENTEX films; not external/clinical validation |
 | panoramic-teeth | MONAI tooth numbering on panoramics | DENTEX | Same dataset, file `pano-teeth-v1.pt` (sha256 7871227c...021e) | Trained 2026-10-22. Held-out test mAP@0.5 0.96, 63 DENTEX films |
+| panoramic-findings v2 | Same, trained with image-quality degradation | DENTEX | Private Kaggle dataset `drhaidarali/harmony-pano-models-v2`, file `pano-findings-v2.pt` (sha256 e2654cdc...2bd) | Trained 2026-10-30 08:28 UTC. Held-out 106 films: normal 0.544 (=v1); degraded 0.546 (v1 0.540). Current best (near-tie) |
+| panoramic-teeth v2 | Same, with degradation | DENTEX | Same dataset, file `pano-teeth-v2.pt` (sha256 d6b8f89c...f37) | Held-out 0.956 (=v1) |
 | tf2-official-checkpoints | ToothFairy2 team's CBCT models | ToothFairy2 | Private Kaggle dataset `drhaidarali/toothfairy2-checkpoints` (nnU-Net ResEnc-L 3D and VMamba 2D, checkpoint_best.pth) | Saved 2026-10-30. No license file inside: **VERIFY** commercial use with the ToothFairy2 team before relying on them |
 
 ## Outside code
