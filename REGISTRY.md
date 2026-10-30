@@ -29,8 +29,8 @@ CC BY 4.0).
 | ID | Task | Trained on | Where the weights live | Status |
 |---|---|---|---|---|
 | v1-fasterrcnn | Detector served by `ml/serve.py` | v1-detector-data | Not in repo (`models/harmony_detector_best.pth`) | Exists; source data VERIFY |
-| panoramic-findings | MONAI RetinaNet, panoramic findings | DENTEX | Private Kaggle notebook output `drhaidarali/harmony-ml-monai-train`, then a draft GitHub Release | Training |
-| panoramic-teeth | MONAI tooth numbering on panoramics | DENTEX | Same as above | Training |
+| panoramic-findings | MONAI RetinaNet, panoramic findings | DENTEX | Private Kaggle dataset `drhaidarali/harmony-pano-models-v1`, file `pano-findings-v1.pt` (sha256 8d142f23...296) | Trained 2026-10-22. Held-out test mAP@0.5 0.54 (impacted 0.92, caries 0.47, deep caries 0.41, periapical 0.39), 106 DENTEX films; not external/clinical validation |
+| panoramic-teeth | MONAI tooth numbering on panoramics | DENTEX | Same dataset, file `pano-teeth-v1.pt` (sha256 7871227c...021e) | Trained 2026-10-22. Held-out test mAP@0.5 0.96, 63 DENTEX films |
 | tf2-official-checkpoints | ToothFairy2 team's CBCT models | ToothFairy2 | Private Kaggle dataset `drhaidarali/toothfairy2-checkpoints` | Downloading; their own license **VERIFY** before use |
 
 ## Outside code
