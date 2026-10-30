@@ -22,5 +22,6 @@ separate from the Harmony app so it can be moved, licensed or sold on its own.
   datasets or GitHub Releases, recorded in `REGISTRY.md`.
 - Secrets (Kaggle token, dataset logins) live only in Kaggle Secrets or
   environment variables, never in code.
+- Timing in every message, status and report is a specific clock time with date and time zone (e.g. "Oct 30, 11:40 UTC"), never only a duration like "about 5 hours". Give both when useful: "finishes about Oct 30, 11:40 UTC (~5 h)".
 - Always report held-out test scores. Never claim or imply 100% accuracy or
   clinical validation.
