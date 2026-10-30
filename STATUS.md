@@ -11,13 +11,14 @@ Last update: 2026-10-30 04:40 UTC
 1. Panoramic v2 (robust) - findings + tooth numbering.
 2. Periapical: fetch Zenodo 13772918 (CC BY 4.0) and DenPAR (Zenodo 16645076) into private Kaggle, inspect, train.
 2b. Panoramic extra classes: add Kaggle "Dental Radiography" (CC BY-SA 4.0) for fillings + implants.
-2c. Bitewing: Roboflow "Bitewing" (775) + "DentalCaries" (~2,000), listed CC BY 4.0. Needs the owner's free Roboflow API key as Kaggle secret ROBOFLOW_API_KEY; verify each licence on download.
+2c. Bitewing: Kaggle sprss96/bitewing-dataset (Roboflow mirror, CC BY 4.0) + ivinlyju/bitewing + shubhamskg/bitewing-datasets (VERIFY provenance). No key needed. Roboflow originals optional later.
+2d. More periapical/panoramic: MMDental (CC0, 1,000 RVG+OPG, 21 classes), nadaaglan periapical (CC BY 4.0), HF periapical-lesions-pai (CC BY 4.0), HF Caries_Bounding_Box (MIT).
+2e. Occlusal: no labelled occlusal set exists. Plan: one shared intraoral model (periapical + bitewing) that also reads occlusal films, reported with lower confidence and tested separately once any occlusal films are available.
 3. One shared 2D X-ray model: panoramic + periapical (+ bitewing/occlusal when data exists).
 4. CBCT: train on ToothFairy2 once its download is done (needs the owner's one click).
 
 ## Blocked (needs data, not effort)
-- Bitewing: waiting for ROBOFLOW_API_KEY (owner). Own clinic films still the best source.
-- Occlusal: no public dataset exists anywhere searched. Needs the owner's own films.
+- Occlusal: no labelled public set found on Kaggle, Hugging Face, Zenodo, Figshare, Mendeley, Roboflow or Scientific Data. Covered for now by the shared intraoral model (2e); real occlusal films needed to test it.
 
 ## Stopping rule
 Each model retrains in rounds. A round is kept only if its held-out test score

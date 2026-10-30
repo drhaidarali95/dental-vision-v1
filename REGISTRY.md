@@ -20,6 +20,13 @@ Releases or private Kaggle datasets listed here.
 | Kaggle Dental Radiography | Low-resolution panoramics; Cavity, Fillings, Implant, Impacted Tooth (Roboflow export) | kaggle.com/datasets/imtkaggleteam/dental-radiography | CC BY-SA 4.0 (Kaggle metadata) | Yes, with credit; share-alike **VERIFY**. Likely the v1 model's training data: owner to confirm | Attach directly on Kaggle | panoramic (fillings, implants) |
 | Roboflow Bitewing | 775 bitewing images | universe.roboflow.com/project-hjkow/bitewing-zmohp | Listed CC BY 4.0 (not yet confirmed on page) | **VERIFY** on download; needs owner's ROBOFLOW_API_KEY | Not yet downloaded | bitewing model |
 | Roboflow DentalCaries | ~2,000 images: caries, cavity, crack, tooth | universe.roboflow.com/roboflow-tcwui/dentalcaries-zps2h | Listed CC BY 4.0 (not yet confirmed on page) | **VERIFY** on download; needs ROBOFLOW_API_KEY | Not yet downloaded | bitewing / 2D caries |
+| Bitewing allside (Kaggle mirror) | Bitewing X-rays, train/valid/test split (Roboflow export) | kaggle.com/datasets/sprss96/bitewing-dataset, original universe.roboflow.com/sidharthsujith-carestack-com/bitewing_allside-qod4s | CC BY 4.0 (original Roboflow README) | Yes, with credit | Attach directly on Kaggle | bitewing model |
+| Bitewing (ivinlyju) | 100 bitewing images | kaggle.com/datasets/ivinlyju/bitewing | Uploader states Apache 2.0; original source unknown: **VERIFY** provenance | **VERIFY** | Attach directly on Kaggle | bitewing model (if labelled) |
+| Bitewing annotations (shubhamskg) | Bitewing images + annotations | kaggle.com/datasets/shubhamskg/bitewing-datasets | Uploader states MIT; original source unknown: **VERIFY** | **VERIFY** | Attach directly on Kaggle | bitewing model |
+| MMDental | 1,000 periapical (RVG) + panoramic (OPG) X-rays, 21 classes, 12,000+ annotations | kaggle.com/datasets/suhrathtahra/dental-dataset | CC0 1.0 (public domain) per Kaggle | Yes | Attach directly on Kaggle | periapical + panoramic |
+| Dental periapical (Roboflow mirror) | Periapical X-rays (Roboflow export) | kaggle.com/datasets/nadaaglan/dental-periapical-x-rays, original universe.roboflow.com/dent-dataset | CC BY 4.0 (original Roboflow README) | Yes, with credit | Attach directly on Kaggle | periapical model |
+| Periapical lesions PAI | Periapical lesion scores | huggingface.co/datasets/tirandazdylan/periapical-lesions-pai | CC BY 4.0 | Yes, with credit | Not yet copied | periapical model |
+| Caries bounding boxes | Caries boxes | huggingface.co/datasets/Frallex/Caries_Bounding_Box | MIT | Yes | Not yet copied | 2D caries |
 
 Rejected for commercial use (NonCommercial licenses): Mendeley bitewing set,
 Teeth3DS, ToothFairy3, Bits2Bites, Bite2Text, IOP-Compass.
