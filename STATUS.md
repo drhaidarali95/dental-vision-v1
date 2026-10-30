@@ -37,3 +37,4 @@ ever called 100% accurate.
 
 ## Watchdog log
 - Oct 30, 06:53 UTC: OK. Panoramic v2 retrain running (started 05:10, expected done ~10:40). No data/weights committed; registry, queue and dashboard on plan.
+- Oct 30, 09:53 UTC: OK. Periapical training running (started 08:34, expected ~10:30). Panoramic v2 saved with checksums and scores. No data/weights committed.
