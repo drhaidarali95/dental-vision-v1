@@ -110,8 +110,8 @@ def main():
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     data = json.loads(args.datalist.read_text())
     classes = data["classes"]
-    if classes not in (CLASSES, TEETH):
-        raise SystemExit(f"unknown class list in datalist: {classes}")
+    if not classes or not all(isinstance(c, str) for c in classes):
+        raise SystemExit(f"bad class list in datalist: {classes}")
     mirror = mirror_tooth if classes == TEETH else None
     train_items, val_items = data["train"], data["val"]
     drafts = []

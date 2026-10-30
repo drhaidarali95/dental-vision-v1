@@ -1,10 +1,11 @@
 # Live status (updated automatically every 2 hours)
 
-Last update: 2026-10-30 05:15 UTC
+Last update: 2026-10-30 08:36 UTC
 
 ## Now
 - Done Oct 30, 05:05 UTC: DENTEX private copy; ToothFairy2 checkpoints (4.6 GB) and scans (26.1 GB) saved privately.
-- Running since Oct 30, 05:10 UTC: panoramic v2 retrain (image-quality training). Expected done about Oct 30, 10:40 UTC.
+- Done Oct 30, 08:28 UTC: panoramic v2 retrain. Clean test: findings 0.544 (v1 0.544), teeth 0.956 (v1 0.956). Deciding test on degraded films running now on CPU.
+- Running since Oct 30, 08:34 UTC: periapical model (1,882 periapical X-rays; caries, badly decayed, root canal, crown, restoration). Expected done about Oct 30, 10:30 UTC.
 
 ## Queue (runs in this order, one GPU job at a time)
 1. Panoramic v2 (robust) - findings + tooth numbering.
