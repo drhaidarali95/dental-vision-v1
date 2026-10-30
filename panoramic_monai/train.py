@@ -12,19 +12,44 @@ expert-labelled. The checkpoint with the best val mAP@0.5 is kept as best.pt,
 and report_val.json records its scores. Test is not touched here.
 """
 import argparse
+import io
 import json
 import math
 import random
 import time
 from pathlib import Path
 
+import numpy as np
 import torch
-from PIL import Image, ImageEnhance
+from PIL import Image, ImageEnhance, ImageFilter
 from torch.utils.data import DataLoader, Dataset
 
 from labels import CLASSES, TEETH, mirror_tooth
 from metrics import coco_metrics
 from model import build_detector, open_film, predict, save_detector, swap_xy, to_model_input
+
+
+def degrade(img: Image.Image) -> Image.Image:
+    """Randomly make a film look older, scanned or lower quality, so the model
+    learns to read poor films too. Box coordinates are unchanged (same size)."""
+    if random.random() < 0.3:  # low-resolution film or sensor, scaled back up
+        f = random.uniform(0.35, 0.8)
+        small = img.resize((max(1, int(img.width * f)), max(1, int(img.height * f))), Image.BILINEAR)
+        img = small.resize(img.size, Image.BILINEAR)
+    if random.random() < 0.25:  # soft focus / patient movement
+        img = img.filter(ImageFilter.GaussianBlur(random.uniform(0.5, 2.0)))
+    if random.random() < 0.3:  # exposure differences between machines
+        g = random.uniform(0.7, 1.4)
+        img = img.point(lambda v: int(255 * (v / 255) ** g))
+    if random.random() < 0.25:  # sensor / scanner noise
+        a = np.asarray(img, dtype=np.float32)
+        a += np.random.normal(0, random.uniform(3, 12), a.shape)
+        img = Image.fromarray(np.clip(a, 0, 255).astype(np.uint8))
+    if random.random() < 0.3:  # heavy JPEG compression (emailed or exported films)
+        buf = io.BytesIO()
+        img.save(buf, "JPEG", quality=random.randint(20, 70))
+        img = Image.open(io.BytesIO(buf.getvalue())).convert(img.mode)
+    return img
 
 
 class Films(Dataset):
@@ -51,6 +76,7 @@ class Films(Dataset):
                     labels = torch.tensor([self.mirror(int(l)) for l in labels], dtype=torch.long)
             img = ImageEnhance.Brightness(img).enhance(random.uniform(0.85, 1.15))
             img = ImageEnhance.Contrast(img).enhance(random.uniform(0.8, 1.25))
+            img = degrade(img)
         x, scale = to_model_input(img)
         return x, {"box": swap_xy(boxes * scale), "label": labels}
 

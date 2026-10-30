@@ -50,6 +50,15 @@ def fetch_dentex():
     if all((DATA / p).exists() for p in prefixes):
         print("DENTEX already present", flush=True)
         return
+    # Prefer the private cached copy (notebook drhaidarali/dentex-data) when attached.
+    cached = next(Path("/kaggle/input").rglob("quadrant-enumeration-disease"), None)
+    if cached is not None:
+        DATA.mkdir(parents=True, exist_ok=True)
+        if (DATA / "training_data").exists():
+            shutil.rmtree(DATA / "training_data")
+        (DATA / "training_data").symlink_to(cached.parent, target_is_directory=True)
+        print(f"DENTEX from cached copy: {cached.parent}", flush=True)
+        return
     zpath = Path("/kaggle/tmp/dentex_training_data.zip")
     zpath.parent.mkdir(parents=True, exist_ok=True)
     total = None

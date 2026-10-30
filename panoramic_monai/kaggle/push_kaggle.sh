@@ -46,7 +46,7 @@ cat > "$STAGE/kernel/kernel-metadata.json" <<EOF
   "enable_internet": true,
   "dataset_sources": ["$DATASET"],
   "competition_sources": [],
-  "kernel_sources": []
+  "kernel_sources": ["$USER_NAME/dentex-data"]
 }
 EOF
 # A new dataset version takes a moment to become attachable.

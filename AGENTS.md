@@ -3,6 +3,14 @@
 This repository is the owner's standalone dental AI package. It is kept
 separate from the Harmony app so it can be moved, licensed or sold on its own.
 
+- Owner's goal: fully trained, high-capability diagnostic models that are the
+  owner's own asset, usable in any project (not only Harmony), clonable,
+  storable anywhere, improvable, licensable and sellable. Every model must be
+  self-contained: weights + the code to load and run it + its test report +
+  checksums, with nothing Harmony-specific required to use it.
+- Robustness is a requirement: train with image-quality degradation (low
+  resolution, blur, noise, exposure, compression) so old, scanned and
+  low-resolution records still read, and report scores on degraded films too.
 - One home: all model code, training jobs and data download scripts live here,
   one folder per record type (`panoramic_monai/`, `cbct_toothfairy2/`, ...).
   Harmony only calls the served models over the `/predict` contract.
