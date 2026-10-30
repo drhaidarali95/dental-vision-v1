@@ -1,12 +1,12 @@
 # Live status (updated automatically every 2 hours)
 
-Last update: 2026-10-30 12:38 UTC
+Last update: 2026-10-30 15:54 UTC
 
 ## Now
 - Done Oct 30, 05:05 UTC: DENTEX private copy; ToothFairy2 checkpoints (4.6 GB) and scans (26.1 GB) saved privately.
 - Done Oct 30, 08:28 UTC: panoramic v2 retrain. Clean test: findings 0.544 (v1 0.544), teeth 0.956 (v1 0.956). Degraded films: v2 0.546 vs v1 0.540. Kept v2 (near-tie; counts as round 1 without meaningful gain under the stopping rule). Saved privately as harmony-pano-models-v2.
 - Done Oct 30, ~10:40 UTC: periapical model v1. Held-out 54 films 0.517 (crown 0.87, restoration 0.75, caries 0.38, badly decayed 0.33, root canal 0.25). Saved privately as harmony-periapical-models-v1.
-- Running since Oct 30, 12:36 UTC: bitewing tooth numbering (8,292 bitewings, FDI 13-48). Expected done about Oct 30, 15:40 UTC.
+- Running since Oct 30, 12:36 UTC: bitewing tooth numbering (8,292 bitewings, FDI 13-48). Expected done about Oct 30, 15:40 UTC; running a little long (watchdog limit: 18:44 UTC).
 
 ## Queue (runs in this order, one GPU job at a time)
 1. Panoramic v2 (robust) - findings + tooth numbering.
@@ -41,3 +41,4 @@ ever called 100% accurate.
 - Oct 30, 06:53 UTC: OK. Panoramic v2 retrain running (started 05:10, expected done ~10:40). No data/weights committed; registry, queue and dashboard on plan.
 - Oct 30, 09:53 UTC: OK. Periapical training running (started 08:34, expected ~10:30). Panoramic v2 saved with checksums and scores. No data/weights committed.
 - Oct 30, 12:53 UTC: OK. Bitewing tooth numbering running (started 12:36, expected ~15:40). Periapical v1 saved with checksum and scores. No data/weights committed.
+- Oct 30, 15:54 UTC: OK. Bitewing training slightly past its estimate (3 h 18 min vs ~3 h), well under the 2x stuck limit (18:44 UTC). Autopilot healthy (last tick 14:28). No data/weights committed.
