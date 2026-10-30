@@ -1,11 +1,10 @@
 # Live status (updated automatically every 2 hours)
 
-Last update: 2026-10-30 04:40 UTC
+Last update: 2026-10-30 05:15 UTC
 
 ## Now
-- DENTEX private copy (`dentex-data`): downloading.
-- ToothFairy2 (CBCT) download: running (started by owner).
-- Next: robust panoramic retrain (v2, image-quality training), ~5 GPU hours.
+- Done Oct 30, 05:05 UTC: DENTEX private copy; ToothFairy2 checkpoints (4.6 GB) and scans (26.1 GB) saved privately.
+- Running since Oct 30, 05:10 UTC: panoramic v2 retrain (image-quality training). Expected done about Oct 30, 10:40 UTC.
 
 ## Queue (runs in this order, one GPU job at a time)
 1. Panoramic v2 (robust) - findings + tooth numbering.
@@ -15,7 +14,7 @@ Last update: 2026-10-30 04:40 UTC
 2d. More periapical/panoramic: MMDental (CC0, 1,000 RVG+OPG, 21 classes), nadaaglan periapical (CC BY 4.0), HF periapical-lesions-pai (CC BY 4.0), HF Caries_Bounding_Box (MIT).
 2e. Occlusal: no labelled occlusal set exists. Plan: one shared intraoral model (periapical + bitewing) that also reads occlusal films, reported with lower confidence and tested separately once any occlusal films are available.
 3. One shared 2D X-ray model: panoramic + periapical (+ bitewing/occlusal when data exists).
-4. CBCT: train on ToothFairy2 once its download is done (needs the owner's one click).
+4. CBCT: train on ToothFairy2 (data saved Oct 30, 05:05 UTC).
 
 ## Blocked (needs data, not effort)
 - Occlusal: no labelled public set found on Kaggle, Hugging Face, Zenodo, Figshare, Mendeley, Roboflow or Scientific Data. Covered for now by the shared intraoral model (2e); real occlusal films needed to test it.
