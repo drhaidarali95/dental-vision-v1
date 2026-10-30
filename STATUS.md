@@ -1,12 +1,13 @@
 # Live status (updated automatically every 2 hours)
 
-Last update: 2026-10-30 15:54 UTC
+Last update: 2026-10-30 18:40 UTC
 
 ## Now
 - Done Oct 30, 05:05 UTC: DENTEX private copy; ToothFairy2 checkpoints (4.6 GB) and scans (26.1 GB) saved privately.
 - Done Oct 30, 08:28 UTC: panoramic v2 retrain. Clean test: findings 0.544 (v1 0.544), teeth 0.956 (v1 0.956). Degraded films: v2 0.546 vs v1 0.540. Kept v2 (near-tie; counts as round 1 without meaningful gain under the stopping rule). Saved privately as harmony-pano-models-v2.
 - Done Oct 30, ~10:40 UTC: periapical model v1. Held-out 54 films 0.517 (crown 0.87, restoration 0.75, caries 0.38, badly decayed 0.33, root canal 0.25). Saved privately as harmony-periapical-models-v1.
-- Running since Oct 30, 12:36 UTC: bitewing tooth numbering (8,292 bitewings, FDI 13-48). Expected done about Oct 30, 15:40 UTC; running a little long (watchdog limit: 18:44 UTC).
+- Done Oct 30, ~18:20 UTC: bitewing tooth numbering v1. Held-out 831 bitewings 0.80. Saved privately as harmony-bitewing-models-v1.
+- PAUSED Oct 30, 18:30 UTC: Kaggle's free weekly GPU allowance (30 h, shared with the owner's other Kaggle projects) is used up. Next job ready to go: panoramic restorations (cavity, fillings, impacted tooth, implant; pano_restorations_monai). The autopilot retries every tick and starts it as soon as the allowance resets (weekly; expected around Oct 31, 00:00 UTC).
 
 ## Queue (runs in this order, one GPU job at a time)
 1. Panoramic v2 (robust) - findings + tooth numbering.
@@ -35,6 +36,7 @@ ever called 100% accurate.
 | Panoramic tooth numbers | v1 | 0.96 | |
 | Panoramic findings | v2 | 0.54 (degraded 0.55) | deep caries 0.43, periapical 0.40, impacted 0.92 |
 | Panoramic tooth numbers | v2 | 0.96 | |
+| Bitewing tooth numbers | v1 | 0.80 | 831 test bitewings; weakest teeth 33, 23, 18, 28 |
 | Periapical findings | v1 | 0.52 | crown 0.87, restoration 0.75, caries 0.38, badly decayed 0.33, root canal 0.25 |
 
 ## Watchdog log

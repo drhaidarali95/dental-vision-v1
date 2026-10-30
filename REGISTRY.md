@@ -46,6 +46,7 @@ CC BY 4.0).
 | panoramic-findings v2 | Same, trained with image-quality degradation | DENTEX | Private Kaggle dataset `drhaidarali/harmony-pano-models-v2`, file `pano-findings-v2.pt` (sha256 e2654cdc...2bd) | Trained 2026-10-30 08:28 UTC. Held-out 106 films: normal 0.544 (=v1); degraded 0.546 (v1 0.540). Current best (near-tie) |
 | panoramic-teeth v2 | Same, with degradation | DENTEX | Same dataset, file `pano-teeth-v2.pt` (sha256 d6b8f89c...f37) | Held-out 0.956 (=v1) |
 | periapical-findings v1 | MONAI RetinaNet, periapical: caries, badly decayed, root canal, crown, restoration | Dental periapical (Roboflow mirror) | Private Kaggle dataset `drhaidarali/harmony-periapical-models-v1`, file `periapical-findings-v1.pt` (sha256 a41f8b44...624d) | Trained 2026-10-30. Held-out 54 films mAP@0.5 0.517 (crown 0.87, restoration 0.75, caries 0.38, badly decayed 0.33, RCT 0.25) |
+| bitewing-teeth v1 | MONAI RetinaNet, bitewing tooth numbering (FDI 13-48) | Bitewing allside (Kaggle mirror) | Private Kaggle dataset `drhaidarali/harmony-bitewing-models-v1`, file `bitewing-teeth-v1.pt` (sha256 d47e1ade...da87) | Trained 2026-10-30, finished ~18:20 UTC. Held-out 831 bitewings mAP@0.5 0.80 (weakest: 33 0.59, 23 0.64, 18/28 0.69) |
 | tf2-official-checkpoints | ToothFairy2 team's CBCT models | ToothFairy2 | Private Kaggle dataset `drhaidarali/toothfairy2-checkpoints` (nnU-Net ResEnc-L 3D and VMamba 2D, checkpoint_best.pth) | Saved 2026-10-30. No license file inside: **VERIFY** commercial use with the ToothFairy2 team before relying on them |
 
 ## Outside code

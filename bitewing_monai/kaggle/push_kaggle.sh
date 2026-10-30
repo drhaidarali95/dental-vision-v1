@@ -26,6 +26,7 @@ cat > "$STAGE/kernel/kernel-metadata.json" <<META
  "dataset_sources": ["$DATASET", "sprss96/bitewing-dataset"], "competition_sources": [], "kernel_sources": []}
 META
 sleep 30
-kaggle kernels push -p "$STAGE/kernel"
+OUTPUT=$(kaggle kernels push -p "$STAGE/kernel" 2>&1); echo "$OUTPUT"
+if echo "$OUTPUT" | grep -qiE "error|quota"; then rm -rf "$STAGE"; echo "NOT started: see the message above." >&2; exit 1; fi
 rm -rf "$STAGE"
 echo "Started $KERNEL"

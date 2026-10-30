@@ -30,11 +30,50 @@ def load(split_dir: Path, classes: list[str]) -> list[dict]:
     return list(items.values())
 
 
+def load_csv(split_dir: Path, classes: list[str]) -> list[dict]:
+    """Roboflow CSV export: filename,width,height,class,xmin,ymin,xmax,ymax."""
+    import csv
+    items: dict[str, dict] = {}
+    with open(split_dir / "_annotations.csv") as f:
+        for row in csv.DictReader(f):
+            path = split_dir / row["filename"]
+            if not path.exists():
+                continue
+            it = items.setdefault(row["filename"], {"image": str(path.resolve()), "box": [], "label": []})
+            name = row["class"]
+            if name.lower() in SKIP or name not in classes:
+                continue
+            box = [float(row[k]) for k in ("xmin", "ymin", "xmax", "ymax")]
+            if box[2] - box[0] > 1 and box[3] - box[1] > 1:
+                it["box"].append(box)
+                it["label"].append(classes.index(name))
+    return list(items.values())
+
+
+def main_csv(a) -> None:
+    root = next(a.root.rglob("_annotations.csv")).parent.parent
+    import csv
+    with open(root / "train/_annotations.csv") as f:
+        classes = sorted({r["class"] for r in csv.DictReader(f) if r["class"].lower() not in SKIP})
+    write(a.out, classes, *(load_csv(root / s, classes) for s in ("train", "valid", "test")))
+
+
+def write(out_path: Path, classes, train, val, test) -> None:
+    out = {"classes": classes, "box_mode": "xyxy_pixels", "train": train, "val": val, "test": test, "unlabeled": []}
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    out_path.write_text(json.dumps(out))
+    for s in ("train", "val", "test"):
+        print(s, len(out[s]), "films,", sum(len(i["label"]) for i in out[s]), "boxes")
+    print("classes", classes)
+
+
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--root", required=True, type=Path)
     p.add_argument("--out", required=True, type=Path)
     a = p.parse_args()
+    if next(a.root.rglob("_annotations.coco.json"), None) is None:
+        return main_csv(a)
     root = next(a.root.rglob("_annotations.coco.json")).parent.parent
     cats = json.loads((root / "train/_annotations.coco.json").read_text())["categories"]
     classes = sorted({c["name"] for c in cats if c["name"].lower() not in SKIP and c.get("supercategory") != "none"})

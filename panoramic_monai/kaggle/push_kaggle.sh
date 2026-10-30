@@ -51,6 +51,7 @@ cat > "$STAGE/kernel/kernel-metadata.json" <<EOF
 EOF
 # A new dataset version takes a moment to become attachable.
 sleep 30
-kaggle kernels push -p "$STAGE/kernel"
+OUTPUT=$(kaggle kernels push -p "$STAGE/kernel" 2>&1); echo "$OUTPUT"
+if echo "$OUTPUT" | grep -qiE "error|quota"; then rm -rf "$STAGE"; echo "NOT started: see the message above." >&2; exit 1; fi
 rm -rf "$STAGE"
 echo "Started $KERNEL. Check with: ./kaggle/push_kaggle.sh status"

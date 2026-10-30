@@ -21,7 +21,7 @@ def sh(*cmd):
 
 
 code = next(Path("/kaggle/input").rglob("prep_coco.py")).parent
-data = next(p for p in Path("/kaggle/input").rglob("_annotations.coco.json") if p.parent.name == "train").parent.parent
+data = next(p for p in Path("/kaggle/input").rglob("_annotations.*") if p.parent.name == "train").parent.parent
 py = sys.executable
 sh(py, "-m", "pip", "install", "-q", "monai==1.4.0", "pycocotools")
 sh(py, code / "prep_coco.py", "--root", data, "--out", WORK / "data/datalist.json")
