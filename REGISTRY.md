@@ -16,6 +16,11 @@ Releases or private Kaggle datasets listed here.
 | ToothFairy2 | 480 CBCT scans, 42 labelled structures (jaws, nerve canals, sinuses, every tooth, crowns, implants) | ditto.ing.unimore.it/toothfairy2, owner's account | CC BY-SA 4.0 (in the dataset's `dataset.json`) | Yes, with credit. Share-alike: **VERIFY** with a lawyer whether models trained on it must also be CC BY-SA | Private Kaggle dataset `drhaidarali/toothfairy2` | `cbct_toothfairy2` (planned) |
 | v1-detector-data | Data behind the original v1 Faster R-CNN model (Cavity, Fillings, Implant, Impacted Tooth; 73 test images) | **VERIFY**: not recorded in this repo | **VERIFY** | **VERIFY** | Unknown | `ml/serve.py` model |
 
+| DenPAR | 1,000 periapical X-rays: tooth masks, CEJ/apex points, bone levels | Zenodo record 16645076 | Zenodo lists CC BY 4.0; the Scientific Data page lists CC BY-NC-ND 4.0 | Owner chose to use it (2026-10-30). **VERIFY** with the authors before a sale | Queued: private Kaggle copy | periapical model |
+| Kaggle Dental Radiography | Low-resolution panoramics; Cavity, Fillings, Implant, Impacted Tooth (Roboflow export) | kaggle.com/datasets/imtkaggleteam/dental-radiography | CC BY-SA 4.0 (Kaggle metadata) | Yes, with credit; share-alike **VERIFY**. Likely the v1 model's training data: owner to confirm | Attach directly on Kaggle | panoramic (fillings, implants) |
+| Roboflow Bitewing | 775 bitewing images | universe.roboflow.com/project-hjkow/bitewing-zmohp | Listed CC BY 4.0 (not yet confirmed on page) | **VERIFY** on download; needs owner's ROBOFLOW_API_KEY | Not yet downloaded | bitewing model |
+| Roboflow DentalCaries | ~2,000 images: caries, cavity, crack, tooth | universe.roboflow.com/roboflow-tcwui/dentalcaries-zps2h | Listed CC BY 4.0 (not yet confirmed on page) | **VERIFY** on download; needs ROBOFLOW_API_KEY | Not yet downloaded | bitewing / 2D caries |
+
 Rejected for commercial use (NonCommercial licenses): Mendeley bitewing set,
 Teeth3DS, ToothFairy3, Bits2Bites, Bite2Text, IOP-Compass.
 

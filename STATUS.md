@@ -1,20 +1,23 @@
 # Live status (updated automatically every 2 hours)
 
-Last update: 2026-10-30 04:30 UTC
+Last update: 2026-10-30 04:40 UTC
 
 ## Now
 - DENTEX private copy (`dentex-data`): downloading.
+- ToothFairy2 (CBCT) download: running (started by owner).
 - Next: robust panoramic retrain (v2, image-quality training), ~5 GPU hours.
 
 ## Queue (runs in this order, one GPU job at a time)
 1. Panoramic v2 (robust) - findings + tooth numbering.
-2. Periapical: fetch Zenodo 13772918 (CC BY 4.0) into private Kaggle, inspect, train.
+2. Periapical: fetch Zenodo 13772918 (CC BY 4.0) and DenPAR (Zenodo 16645076) into private Kaggle, inspect, train.
+2b. Panoramic extra classes: add Kaggle "Dental Radiography" (CC BY-SA 4.0) for fillings + implants.
+2c. Bitewing: Roboflow "Bitewing" (775) + "DentalCaries" (~2,000), listed CC BY 4.0. Needs the owner's free Roboflow API key as Kaggle secret ROBOFLOW_API_KEY; verify each licence on download.
 3. One shared 2D X-ray model: panoramic + periapical (+ bitewing/occlusal when data exists).
 4. CBCT: train on ToothFairy2 once its download is done (needs the owner's one click).
 
 ## Blocked (needs data, not effort)
-- Bitewing and occlusal X-rays: no commercial-safe public data. Needs the owner's own anonymised films.
-- CBCT: ToothFairy2 download must be started once from the owner's browser.
+- Bitewing: waiting for ROBOFLOW_API_KEY (owner). Own clinic films still the best source.
+- Occlusal: no public dataset exists anywhere searched. Needs the owner's own films.
 
 ## Stopping rule
 Each model retrains in rounds. A round is kept only if its held-out test score
