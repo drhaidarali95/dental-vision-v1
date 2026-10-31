@@ -47,3 +47,4 @@ ever called 100% accurate.
 - Oct 30, 15:54 UTC: OK. Bitewing training slightly past its estimate (3 h 18 min vs ~3 h), well under the 2x stuck limit (18:44 UTC). Autopilot healthy (last tick 14:28). No data/weights committed.
 - Oct 30, 18:53 UTC: OK. No job running: paused on the weekly Kaggle GPU limit, restorations job ready; autopilot retries each tick. Bitewing v1 saved with checksum and scores. No data/weights committed.
 - Oct 30, 21:54 UTC: OK. Still paused on the weekly Kaggle GPU limit (autopilot retried 20:28, refused by quota). Autopilot alive; it now also refreshes "Last update" on no-change ticks. No data/weights committed.
+- Oct 31, 00:53 UTC: OK. GPU allowance reset; panoramic restorations running (started 00:28, expected ~02:30). Queue order and licences on plan. No data/weights committed.
