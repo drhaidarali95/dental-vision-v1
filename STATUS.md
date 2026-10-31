@@ -1,6 +1,6 @@
 # Live status (updated automatically every 2 hours)
 
-Last update: 2026-10-31 00:30 UTC
+Last update: 2026-10-31 02:35 UTC
 
 ## Now
 - Done Oct 30, 05:05 UTC: DENTEX private copy; ToothFairy2 checkpoints (4.6 GB) and scans (26.1 GB) saved privately.
@@ -8,14 +8,14 @@ Last update: 2026-10-31 00:30 UTC
 - Done Oct 30, ~10:40 UTC: periapical model v1. Held-out 54 films 0.517 (crown 0.87, restoration 0.75, caries 0.38, badly decayed 0.33, root canal 0.25). Saved privately as harmony-periapical-models-v1.
 - Done Oct 30, ~18:20 UTC: bitewing tooth numbering v1. Held-out 831 bitewings 0.80. Saved privately as harmony-bitewing-models-v1.
 - Oct 30, 18:30 to Oct 31, 00:28 UTC: paused on Kaggle's weekly GPU limit; it reset by Oct 31, 00:28 UTC.
-- Running since Oct 31, 00:28 UTC: panoramic restorations (cavity, fillings, impacted tooth, implant; 1,075 training films, same 73-film test as the original v1 detector). Expected done about Oct 31, 02:30 UTC.
+- Done Oct 31, ~02:20 UTC: panoramic restorations v1. Held-out 73 films 0.74 (implant 0.95, impacted 0.81, fillings 0.79, cavity 0.42). Saved privately as harmony-pano-restorations-v1.
 
 ## Queue (runs in this order, one GPU job at a time)
 1. Panoramic v2 (robust) - findings + tooth numbering.
 2. Periapical: fetch Zenodo 13772918 (CC BY 4.0) and DenPAR (Zenodo 16645076) into private Kaggle, inspect, train.
 2b. Panoramic extra classes: add Kaggle "Dental Radiography" (CC BY-SA 4.0) for fillings + implants.
 2c. Bitewing: Kaggle sprss96/bitewing-dataset (Roboflow mirror, CC BY 4.0) + ivinlyju/bitewing + shubhamskg/bitewing-datasets (VERIFY provenance). No key needed. Roboflow originals optional later.
-2d. More periapical/panoramic: MMDental (CC0, 1,000 RVG+OPG, 21 classes), nadaaglan periapical (CC BY 4.0), HF periapical-lesions-pai (CC BY 4.0), HF Caries_Bounding_Box (MIT).
+2d. More periapical/panoramic: MMDental (CC0; Kaggle copy has images only, labels missing, find original release), nadaaglan periapical (CC BY 4.0), HF periapical-lesions-pai (CC BY 4.0), HF Caries_Bounding_Box (MIT).
 2e. Occlusal: no labelled occlusal set exists. Plan: one shared intraoral model (periapical + bitewing) that also reads occlusal films, reported with lower confidence and tested separately once any occlusal films are available.
 3. One shared 2D X-ray model: panoramic + periapical (+ bitewing/occlusal when data exists).
 4. CBCT: train on ToothFairy2 (data saved Oct 30, 05:05 UTC).
@@ -38,6 +38,7 @@ ever called 100% accurate.
 | Panoramic findings | v2 | 0.54 (degraded 0.55) | deep caries 0.43, periapical 0.40, impacted 0.92 |
 | Panoramic tooth numbers | v2 | 0.96 | |
 | Bitewing tooth numbers | v1 | 0.80 | 831 test bitewings; weakest teeth 33, 23, 18, 28 |
+| Panoramic restorations | v1 | 0.74 | implant 0.95, impacted 0.81, fillings 0.79, cavity 0.42 (73 films) |
 | Periapical findings | v1 | 0.52 | crown 0.87, restoration 0.75, caries 0.38, badly decayed 0.33, root canal 0.25 |
 
 ## Watchdog log
