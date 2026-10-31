@@ -49,3 +49,4 @@ ever called 100% accurate.
 - Oct 30, 18:53 UTC: OK. No job running: paused on the weekly Kaggle GPU limit, restorations job ready; autopilot retries each tick. Bitewing v1 saved with checksum and scores. No data/weights committed.
 - Oct 30, 21:54 UTC: OK. Still paused on the weekly Kaggle GPU limit (autopilot retried 20:28, refused by quota). Autopilot alive; it now also refreshes "Last update" on no-change ticks. No data/weights committed.
 - Oct 31, 00:53 UTC: OK. GPU allowance reset; panoramic restorations running (started 00:28, expected ~02:30). Queue order and licences on plan. No data/weights committed.
+- Oct 31, 03:53 UTC: OK with one note. No job running since 02:20 (restorations done). Next item, CBCT, needs its training job built first; autopilot takes it at 04:27. Restorations v1 saved with checksum and scores. No data/weights committed.
