@@ -1,6 +1,6 @@
 # Live status (updated automatically every 2 hours)
 
-Last update: 2026-10-31 02:35 UTC
+Last update: 2026-10-31 04:33 UTC
 
 ## Now
 - Done Oct 30, 05:05 UTC: DENTEX private copy; ToothFairy2 checkpoints (4.6 GB) and scans (26.1 GB) saved privately.
@@ -8,6 +8,7 @@ Last update: 2026-10-31 02:35 UTC
 - Done Oct 30, ~10:40 UTC: periapical model v1. Held-out 54 films 0.517 (crown 0.87, restoration 0.75, caries 0.38, badly decayed 0.33, root canal 0.25). Saved privately as harmony-periapical-models-v1.
 - Done Oct 30, ~18:20 UTC: bitewing tooth numbering v1. Held-out 831 bitewings 0.80. Saved privately as harmony-bitewing-models-v1.
 - Oct 30, 18:30 to Oct 31, 00:28 UTC: paused on Kaggle's weekly GPU limit; it reset by Oct 31, 00:28 UTC.
+- Running since Oct 31, 04:31 UTC: CBCT segmentation v1 (ToothFairy2, 480 scans resampled to 1 mm, 3D SegResNet, 7.5 h training budget, 48 scans held out). Expected done about Oct 31, 14:00 UTC.
 - Done Oct 31, ~02:20 UTC: panoramic restorations v1. Held-out 73 films 0.74 (implant 0.95, impacted 0.81, fillings 0.79, cavity 0.42). Saved privately as harmony-pano-restorations-v1.
 
 ## Queue (runs in this order, one GPU job at a time)
