@@ -1,6 +1,6 @@
 # Live status (updated automatically every 2 hours)
 
-Last update: 2026-11-01 22:00 UTC
+Last update: 2026-11-01 22:30 UTC
 
 ## Now
 - Done Oct 30, 05:05 UTC: DENTEX private copy; ToothFairy2 checkpoints (4.6 GB) and scans (26.1 GB) saved privately.
@@ -17,6 +17,8 @@ Last update: 2026-11-01 22:00 UTC
 - Nov 1, 20:55 UTC: CBCT v2 RUNNING on second Kaggle account haydaralik (kernel haydaralik/harmony-cbct-train-v2; datasets shared from drhaidarali). Expected done ~06:30 UTC Nov 2. This session has only the main token; check/fetch it via a helper session that has KAGGLE2_API_TOKEN.
 
 - Nov 1, 21:15 UTC: Periapical v2 RUNNING on haydaralik (kernel haydaralik/harmony-periapical-train): 1024 px, oversampled caries/badly decayed/RCT films, 100 epochs. Expected ~01:15 UTC Nov 2. Goal set by owner: 99% per skill. 10-day refresh scheduled (trig_01PBP2ydwDvhxYvE6pf2NpK1, 1st/11th/21st 03:41 UTC).
+
+- Nov 1, 22:16 UTC: CBCT v2 restarted offline on haydaralik (wheels dataset haydaralik/harmony-wheels), RUNNING, expected ~07:45 UTC Nov 2. Periapical v2 failed offline (ResNet-50 pretrained weights download); fix ready: ship resnet50-11ad3fa6.pth in harmony-wheels and pre-copy to torch cache.
 
 ## Queue (runs in this order, one GPU job at a time)
 1. Panoramic v2 (robust) - findings + tooth numbering.
