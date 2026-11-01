@@ -22,7 +22,7 @@ cp kaggle_train/kernel.py "$STAGE/kernel/kernel.py"
 cat > "$STAGE/kernel/kernel-metadata.json" <<META
 {"id": "$KERNEL", "title": "harmony-cbct-train", "code_file": "kernel.py", "language": "python",
  "kernel_type": "script", "is_private": true, "enable_gpu": true, "enable_internet": true,
- "dataset_sources": ["$DATASET", "$USER_NAME/toothfairy2"], "competition_sources": [], "kernel_sources": []}
+ "dataset_sources": ["$DATASET", "$USER_NAME/toothfairy2", "$USER_NAME/harmony-cbct-models-v1"], "competition_sources": [], "kernel_sources": []}
 META
 sleep 30
 OUTPUT=$(kaggle kernels push -p "$STAGE/kernel" 2>&1); echo "$OUTPUT"

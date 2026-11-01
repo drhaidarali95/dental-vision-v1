@@ -69,7 +69,13 @@ def crop(img, lab, fg_prob=0.7):
     pad = [(0, max(0, P - s)) for P, s in zip(PATCH, img.shape)]
     img, lab = np.pad(img, pad), np.pad(lab, pad)
     if random.random() < fg_prob and lab.any():
-        zz, yy, xx = np.nonzero(lab)
+        # Class-balanced: pick a structure uniformly, then a voxel of it, so small
+        # or rare structures (upper teeth, sinuses) are seen as often as the jaw.
+        present = np.unique(lab[::4, ::4, ::4]); present = present[present > 0]
+        cls = random.choice(list(present)) if len(present) else None
+        zz, yy, xx = np.nonzero(lab == cls) if cls is not None else np.nonzero(lab)
+        if len(zz) == 0:
+            zz, yy, xx = np.nonzero(lab)
         i = random.randrange(len(zz))
         c = (zz[i], yy[i], xx[i])
     else:
@@ -112,6 +118,8 @@ def main():
     ap.add_argument("--hours", type=float, default=7.5, help="training time budget")
     ap.add_argument("--test", type=int, default=48)
     ap.add_argument("--val", type=int, default=24)
+    ap.add_argument("--init", type=Path, help="start from an earlier checkpoint (e.g. cbct-seg-v1.pt)")
+    ap.add_argument("--lr", type=float, default=2e-4)
     a = ap.parse_args()
     random.seed(SEED)
     np.random.seed(SEED)
@@ -136,8 +144,11 @@ def main():
     dev = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = SegResNet(spatial_dims=3, in_channels=1, out_channels=n_cls, init_filters=16,
                       blocks_down=(1, 2, 2, 4), blocks_up=(1, 1, 1)).to(dev)
+    if a.init:
+        model.load_state_dict(torch.load(a.init, map_location=dev, weights_only=False)["state_dict"])
+        print(f"started from {a.init}", flush=True)
     loss_fn = DiceCELoss(to_onehot_y=True, softmax=True)
-    opt = torch.optim.AdamW(model.parameters(), lr=2e-4, weight_decay=1e-5)
+    opt = torch.optim.AdamW(model.parameters(), lr=a.lr, weight_decay=1e-5)
     scaler = torch.cuda.amp.GradScaler(enabled=dev.type == "cuda")
     out = a.out / "cbct"
     out.mkdir(parents=True, exist_ok=True)
