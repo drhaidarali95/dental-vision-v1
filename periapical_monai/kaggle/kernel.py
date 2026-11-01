@@ -10,9 +10,10 @@ import subprocess
 import sys
 from pathlib import Path
 
+os.environ.setdefault("HARMONY_OVERSAMPLE", "caries,badly decayed,root canal treatment,root canal,rct")
 WORK = Path("/kaggle/working")
-EPOCHS = os.environ.get("PA_EPOCHS", "60")
-os.environ["HARMONY_LONG_SIDE"] = os.environ.get("HARMONY_LONG_SIDE", "640")
+EPOCHS = os.environ.get("PA_EPOCHS", "100")
+os.environ["HARMONY_LONG_SIDE"] = os.environ.get("HARMONY_LONG_SIDE", "1024")
 
 
 def sh(*cmd):
@@ -26,6 +27,6 @@ py = sys.executable
 sh(py, "-m", "pip", "install", "-q", "monai==1.4.0", "pycocotools")
 sh(py, code / "prep_coco.py", "--root", data, "--out", WORK / "data/datalist.json")
 sh(py, code / "train.py", "--datalist", WORK / "data/datalist.json", "--out", WORK / "periapical",
-   "--epochs", EPOCHS, "--batch-size", "8")
+   "--epochs", EPOCHS, "--batch-size", "4")
 sh(py, code / "test_report.py", "--datalist", WORK / "data/datalist.json",
    "--model", WORK / "periapical/best.pt", "--out", WORK / "report_periapical_test.json")

@@ -15,6 +15,7 @@ import argparse
 import io
 import json
 import math
+import os
 import random
 import time
 from pathlib import Path
@@ -135,6 +136,14 @@ def main():
         drafts = json.loads(args.drafts.read_text())["items"]
         held = {it["image"] for it in val_items + data["test"]}
         drafts = [d for d in drafts if d["image"] not in held]
+    # Optional: repeat training films that contain weak classes (env HARMONY_OVERSAMPLE="name1,name2", x HARMONY_OVERSAMPLE_X)
+    weak = [c.strip().lower() for c in os.environ.get("HARMONY_OVERSAMPLE", "").split(",") if c.strip()]
+    if weak:
+        idx = {i for i, c in enumerate(classes) if c.lower() in weak}
+        times = int(os.environ.get("HARMONY_OVERSAMPLE_X", "3"))
+        extra = [it for it in train_items if idx & set(it["label"])] * (times - 1)
+        print(f"oversampling {len(extra)} extra films with {sorted(classes[i] for i in idx)}", flush=True)
+        train_items = train_items + extra
     if args.max_items:
         train_items, val_items = train_items[: args.max_items], val_items[: args.max_items]
     print(f"train {len(train_items)} expert + {len(drafts)} draft images, val {len(val_items)}", flush=True)
