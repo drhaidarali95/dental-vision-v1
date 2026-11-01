@@ -170,7 +170,11 @@ def main():
         scaler.load_state_dict(state["scaler"])
         best, history, first = state["best"], state["history"], state["epoch"] + 1
         print(f"resuming after epoch {state['epoch']} (best val mAP@0.5 {best:.4f})", flush=True)
+    deadline = time.time() + float(os.environ.get("HARMONY_HOURS", "0")) * 3600 if os.environ.get("HARMONY_HOURS") else None
     for epoch in range(first, args.epochs + 1):
+        if deadline and time.time() > deadline:
+            print(f"time budget reached before epoch {epoch}; stopping", flush=True)
+            break
         detector.train()
         started, total = time.time(), 0.0
         for images, targets in loader:
