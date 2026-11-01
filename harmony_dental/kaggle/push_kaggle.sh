@@ -17,7 +17,7 @@ cp kaggle/kernel.py "$S/kernel/kernel.py"
 cat > "$S/kernel/kernel-metadata.json" <<META
 {"id": "$KERNEL", "title": "harmony-dental-xray-train", "code_file": "kernel.py", "language": "python",
  "kernel_type": "script", "is_private": true, "enable_gpu": true, "enable_internet": false,
- "dataset_sources": ["$DATASET", "$U/harmony-wheels", "nadaaglan/dental-periapical-x-rays", "imtkaggleteam/dental-radiography", "sprss96/bitewing-dataset"],
+ "dataset_sources": ["$DATASET", "$U/harmony-wheels", "$U/harmony-resnet50", "nadaaglan/dental-periapical-x-rays", "imtkaggleteam/dental-radiography", "sprss96/bitewing-dataset"],
  "competition_sources": [], "kernel_sources": []}
 META
 sleep 30
