@@ -1,6 +1,6 @@
 # Live status (updated automatically every 2 hours)
 
-Last update: 2026-10-31 04:33 UTC
+Last update: 2026-11-01 19:20 UTC
 
 ## Now
 - Done Oct 30, 05:05 UTC: DENTEX private copy; ToothFairy2 checkpoints (4.6 GB) and scans (26.1 GB) saved privately.
@@ -8,7 +8,8 @@ Last update: 2026-10-31 04:33 UTC
 - Done Oct 30, ~10:40 UTC: periapical model v1. Held-out 54 films 0.517 (crown 0.87, restoration 0.75, caries 0.38, badly decayed 0.33, root canal 0.25). Saved privately as harmony-periapical-models-v1.
 - Done Oct 30, ~18:20 UTC: bitewing tooth numbering v1. Held-out 831 bitewings 0.80. Saved privately as harmony-bitewing-models-v1.
 - Oct 30, 18:30 to Oct 31, 00:28 UTC: paused on Kaggle's weekly GPU limit; it reset by Oct 31, 00:28 UTC.
-- Running since Oct 31, 04:31 UTC: CBCT segmentation v1 (ToothFairy2, 480 scans resampled to 1 mm, 3D SegResNet, 7.5 h training budget, 48 scans held out). Expected done about Oct 31, 14:00 UTC.
+- Done Oct 31 (~14:00 UTC): CBCT segmentation v1 (ToothFairy2). Held-out 48 scans mean Dice 0.64: lower jaw 0.95, lower teeth 0.80-0.91, nerve canals 0.78, upper teeth 0.30-0.68, upper jaw 0.49, sinuses 0.50. Saved privately Nov 1, 19:15 UTC as harmony-cbct-models-v1.
+- Note: scheduled checks from Oct 31, 06:53 UTC to Nov 1, 12:54 UTC were not processed (session was offline); caught up Nov 1, 19:12 UTC.
 - Done Oct 31, ~02:20 UTC: panoramic restorations v1. Held-out 73 films 0.74 (implant 0.95, impacted 0.81, fillings 0.79, cavity 0.42). Saved privately as harmony-pano-restorations-v1.
 
 ## Queue (runs in this order, one GPU job at a time)
@@ -40,6 +41,7 @@ ever called 100% accurate.
 | Panoramic tooth numbers | v2 | 0.96 | |
 | Bitewing tooth numbers | v1 | 0.80 | 831 test bitewings; weakest teeth 33, 23, 18, 28 |
 | Panoramic restorations | v1 | 0.74 | implant 0.95, impacted 0.81, fillings 0.79, cavity 0.42 (73 films) |
+| CBCT segmentation | v1 | 0.64 Dice | 48 test scans; lower jaw 0.95, lower teeth 0.80-0.91, upper teeth 0.30-0.68 |
 | Periapical findings | v1 | 0.52 | crown 0.87, restoration 0.75, caries 0.38, badly decayed 0.33, root canal 0.25 |
 
 ## Watchdog log
@@ -51,3 +53,4 @@ ever called 100% accurate.
 - Oct 30, 21:54 UTC: OK. Still paused on the weekly Kaggle GPU limit (autopilot retried 20:28, refused by quota). Autopilot alive; it now also refreshes "Last update" on no-change ticks. No data/weights committed.
 - Oct 31, 00:53 UTC: OK. GPU allowance reset; panoramic restorations running (started 00:28, expected ~02:30). Queue order and licences on plan. No data/weights committed.
 - Oct 31, 03:53 UTC: OK with one note. No job running since 02:20 (restorations done). Next item, CBCT, needs its training job built first; autopilot takes it at 04:27. Restorations v1 saved with checksum and scores. No data/weights committed.
+- Nov 1, 19:20 UTC: Fixed. 26 checks missed while the session was offline (Oct 31, 06:53 to Nov 1, 12:54 UTC). CBCT finished; results fetched, saved with checksums, registry and scores updated. No data/weights committed.
