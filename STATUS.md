@@ -1,6 +1,6 @@
 # Live status (updated automatically every 2 hours)
 
-Last update: 2026-11-01 19:20 UTC
+Last update: 2026-11-01 20:30 UTC
 
 ## Now
 - Done Oct 30, 05:05 UTC: DENTEX private copy; ToothFairy2 checkpoints (4.6 GB) and scans (26.1 GB) saved privately.
@@ -11,6 +11,8 @@ Last update: 2026-11-01 19:20 UTC
 - Done Oct 31 (~14:00 UTC): CBCT segmentation v1 (ToothFairy2). Held-out 48 scans mean Dice 0.64: lower jaw 0.95, lower teeth 0.80-0.91, nerve canals 0.78, upper teeth 0.30-0.68, upper jaw 0.49, sinuses 0.50. Saved privately Nov 1, 19:15 UTC as harmony-cbct-models-v1.
 - Note: scheduled checks from Oct 31, 06:53 UTC to Nov 1, 12:54 UTC were not processed (session was offline); caught up Nov 1, 19:12 UTC.
 - Done Oct 31, ~02:20 UTC: panoramic restorations v1. Held-out 73 films 0.74 (implant 0.95, impacted 0.81, fillings 0.79, cavity 0.42). Saved privately as harmony-pano-restorations-v1.
+
+- Nov 1, 20:30 UTC: CBCT v2 code ready (starts from v1, class-balanced crops). Kaggle refused to start it: "maximum GPU sessions reached" (another account notebook, credible-reranker-v6, is running). Retrying every tick.
 
 ## Queue (runs in this order, one GPU job at a time)
 1. Panoramic v2 (robust) - findings + tooth numbering.
