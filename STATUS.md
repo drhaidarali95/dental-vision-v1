@@ -1,6 +1,6 @@
 # Live status (updated automatically every 2 hours)
 
-Last update: 2026-11-02 01:20 UTC
+Last update: 2026-11-02 01:52 UTC
 
 ## Now
 - Done Oct 30, 05:05 UTC: DENTEX private copy; ToothFairy2 checkpoints (4.6 GB) and scans (26.1 GB) saved privately.
@@ -71,3 +71,4 @@ ever called 100% accurate.
 - Oct 31, 03:53 UTC: OK with one note. No job running since 02:20 (restorations done). Next item, CBCT, needs its training job built first; autopilot takes it at 04:27. Restorations v1 saved with checksum and scores. No data/weights committed.
 - Nov 1, 19:20 UTC: Fixed. 26 checks missed while the session was offline (Oct 31, 06:53 to Nov 1, 12:54 UTC). CBCT finished; results fetched, saved with checksums, registry and scores updated. No data/weights committed.
 - Nov 1, 21:56 UTC: Fixed. CBCT v2 and periapical v2 on haydaralik both ERROR: no internet on that account (phone not verified), pip could not install monai. Fix: wheels shipped as private dataset haydaralik/harmony-wheels, kernels re-pushed offline. Main account token stopped working (owner to re-add KAGGLE_API_TOKEN). No data/weights committed.
+- Nov 2, 01:52 UTC: OK. All 3 haydaralik jobs RUNNING (checked 01:50 with the new haydaralik key, now usable in this session); main-account X-ray v2 RUNNING. Periapical-only run can't be cancelled via API (no session id); owner may stop it in the UI. No data/weights committed.
