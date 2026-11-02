@@ -73,3 +73,4 @@ ever called 100% accurate.
 - Nov 1, 21:56 UTC: Fixed. CBCT v2 and periapical v2 on haydaralik both ERROR: no internet on that account (phone not verified), pip could not install monai. Fix: wheels shipped as private dataset haydaralik/harmony-wheels, kernels re-pushed offline. Main account token stopped working (owner to re-add KAGGLE_API_TOKEN). No data/weights committed.
 - Nov 2, 01:52 UTC: OK. All 3 haydaralik jobs RUNNING (checked 01:50 with the new haydaralik key, now usable in this session); main-account X-ray v2 RUNNING. Periapical-only run can't be cancelled via API (no session id); owner may stop it in the UI. No data/weights committed.
 - Nov 2, 02:52 UTC: OK. haydaralik jobs checked directly (see statuses in chat). Photo part prepared (haydaralik/harmony-photo-caries + harmony_dental/photo/). No data/weights committed.
+- Nov 2, 03:53 UTC: OK. All haydaralik jobs RUNNING.
