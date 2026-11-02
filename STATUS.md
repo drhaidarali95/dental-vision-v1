@@ -1,6 +1,6 @@
 # Live status (updated automatically every 2 hours)
 
-Last update: 2026-11-02 06:40 UTC
+Last update: 2026-11-02 12:05 UTC
 
 ## Now
 - Done Oct 30, 05:05 UTC: DENTEX private copy; ToothFairy2 checkpoints (4.6 GB) and scans (26.1 GB) saved privately.
@@ -76,3 +76,4 @@ ever called 100% accurate.
 - Nov 2, 01:52 UTC: OK. All 3 haydaralik jobs RUNNING (checked 01:50 with the new haydaralik key, now usable in this session); main-account X-ray v2 RUNNING. Periapical-only run can't be cancelled via API (no session id); owner may stop it in the UI. No data/weights committed.
 - Nov 2, 02:52 UTC: OK. haydaralik jobs checked directly (see statuses in chat). Photo part prepared (haydaralik/harmony-photo-caries + harmony_dental/photo/). No data/weights committed.
 - Nov 2, 03:53 UTC: OK. All haydaralik jobs RUNNING.
+- Nov 2, 11:54 UTC: Found and fixed. haydaralik X-ray v1 and periapical-only run were cut off at Kaggle's 12 h limit (CANCEL_ACKNOWLEDGED) with no weights: the X-ray log shows no epoch finished after start (likely CPU or stalled loader; no progress logging then). Added GPU check, step logging and mid-epoch time budget; X-ray restarted on haydaralik 12:00 UTC (8 h budget).
