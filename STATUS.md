@@ -1,6 +1,6 @@
 # Live status (updated automatically every 2 hours)
 
-Last update: 2026-11-01 23:45 UTC
+Last update: 2026-11-02 00:15 UTC
 
 ## Now
 - Done Oct 30, 05:05 UTC: DENTEX private copy; ToothFairy2 checkpoints (4.6 GB) and scans (26.1 GB) saved privately.
@@ -21,6 +21,8 @@ Last update: 2026-11-01 23:45 UTC
 - Nov 1, 22:16 UTC: CBCT v2 restarted offline on haydaralik (wheels dataset haydaralik/harmony-wheels), RUNNING, expected ~07:45 UTC Nov 2. Periapical v2 failed offline (ResNet-50 pretrained weights download); fix ready: ship resnet50-11ad3fa6.pth in harmony-wheels and pre-copy to torch cache.
 
 - Nov 1, 23:45 UTC: OWNER DECISION: ONE model for everything (harmony_dental/): one file harmony-dental.pt = X-ray part (one detector trained on ALL flat X-rays together: panoramic, periapical, bitewing, occlusal) + CBCT part; automatic routing by input type. No more per-film-type models. Next GPU job: harmony_dental X-ray part (kaggle/push_kaggle.sh on haydaralik, offline).
+
+- Nov 2, 00:12 UTC: 3 jobs RUNNING on haydaralik: harmony-dental-xray-train (ONE X-ray part, all flat X-rays, started Nov 1 23:37, 10.5 h cap, done ~10:30 UTC), harmony-cbct-train-v2 (CBCT part, done ~07:45 UTC), harmony-periapical-train (test run).
 
 ## Queue (runs in this order, one GPU job at a time)
 1. Panoramic v2 (robust) - findings + tooth numbering.

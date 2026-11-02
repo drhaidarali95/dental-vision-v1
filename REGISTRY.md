@@ -53,6 +53,9 @@ CC BY 4.0).
 
 ## Outside code
 
+| ResNet-50 ImageNet weights (torchvision `resnet50-11ad3fa6.pth`) | BSD-3 | Starting point for the X-ray detector; private copy `haydaralik/harmony-resnet50` for offline kernels |
+| Python wheels (MONAI 1.4.0, pycocotools, SimpleITK) | Apache 2.0 / BSD | Private copy `haydaralik/harmony-wheels` for offline kernels |
+
 | What | License | How used |
 |---|---|---|
 | MONAI, PyTorch, torchvision | Apache 2.0 / BSD | Libraries |
