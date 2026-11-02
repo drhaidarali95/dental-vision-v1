@@ -1,6 +1,6 @@
 # Live status (updated automatically every 2 hours)
 
-Last update: 2026-11-02 12:05 UTC
+Last update: 2026-11-02 18:54 UTC
 
 ## Now
 - Done Oct 30, 05:05 UTC: DENTEX private copy; ToothFairy2 checkpoints (4.6 GB) and scans (26.1 GB) saved privately.
@@ -77,3 +77,4 @@ ever called 100% accurate.
 - Nov 2, 02:52 UTC: OK. haydaralik jobs checked directly (see statuses in chat). Photo part prepared (haydaralik/harmony-photo-caries + harmony_dental/photo/). No data/weights committed.
 - Nov 2, 03:53 UTC: OK. All haydaralik jobs RUNNING.
 - Nov 2, 11:54 UTC: Found and fixed. haydaralik X-ray v1 and periapical-only run were cut off at Kaggle's 12 h limit (CANCEL_ACKNOWLEDGED) with no weights: the X-ray log shows no epoch finished after start (likely CPU or stalled loader; no progress logging then). Added GPU check, step logging and mid-epoch time budget; X-ray restarted on haydaralik 12:00 UTC (8 h budget).
+- Nov 2, 18:54 UTC: CBCT v3 finished on CPU (haydaralik has no GPU until phone verification): 3 epochs, mean Dice 0.641 vs v1 0.643, some upper incisors -0.10 -> rejected, v1 stays. Training on haydaralik on hold until GPU; main token missing in env.
