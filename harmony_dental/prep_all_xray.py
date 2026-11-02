@@ -26,7 +26,7 @@ ALIASES = {
 
 def norm(name: str) -> str | None:
     n = name.strip()
-    if n.lower() in SKIP:
+    if n.lower() in SKIP or n.count("-") >= 2:  # Roboflow parent class like "D0-D1-...-D6"
         return None
     if len(n) == 2 and n.isdigit():
         return n  # FDI tooth number
