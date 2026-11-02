@@ -68,6 +68,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--input", type=Path, default=Path("/kaggle/input"))
     ap.add_argument("--out", type=Path, required=True)
+    ap.add_argument("--extra", type=Path, help="JSON from prep_extra.py (DENTEX, PAI panoramics)")
     a = ap.parse_args()
     roots = sorted({p.parent.parent for p in a.input.rglob("_annotations.*") if p.parent.name == "train"})
     splits = {"train": [], "val": [], "test": []}
@@ -83,6 +84,12 @@ def main():
                 if s == "test":
                     per_source[src] = its
         print(f"{src}: " + ", ".join(f"{s} {sum(1 for i in splits[s] if i['source'] == src)}" for s in splits), flush=True)
+    if a.extra and a.extra.exists():
+        ex = json.loads(a.extra.read_text())
+        for s in splits:
+            splits[s] += ex.get(s, [])
+        for it in ex.get("test", []):
+            per_source.setdefault(it["source"], []).append(it)
     classes = sorted({n for s in splits.values() for it in s for n in it["name"]})
     def conv(its):
         return [{"image": i["image"], "box": i["box"], "label": [classes.index(n) for n in i["name"]], "source": i["source"]} for i in its]

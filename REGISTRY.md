@@ -12,7 +12,7 @@ Releases or private Kaggle datasets listed here.
 
 | ID | What | Source (exact copy used) | License | Commercial use | Stored at | Used by |
 |---|---|---|---|---|---|---|
-| DENTEX | 705 fully labelled panoramics (caries, deep caries, periapical lesion, impacted) + tooth numbering | Zenodo record 7812323, `training_data.zip` (checked 2026-10-22) | Zenodo lists CC BY 4.0. The DENTEX GitHub says CC BY-SA 4.0 and a Hugging Face copy says CC BY-NC-SA 4.0 | Yes per Zenodo, **VERIFY**: get written confirmation from the DENTEX authors before a sale | Private Kaggle notebook output `drhaidarali/dentex-data` (one cached copy, attached by training) | `panoramic_monai`, original v1 notebooks |
+| DENTEX | 705 fully labelled panoramics (caries, deep caries, periapical lesion, impacted) + tooth numbering | Zenodo record 7812323, `training_data.zip` (checked 2026-10-22) | Zenodo lists CC BY 4.0. The DENTEX GitHub says CC BY-SA 4.0 and a Hugging Face copy says CC BY-NC-SA 4.0 | Yes per Zenodo, **VERIFY**: get written confirmation from the DENTEX authors before a sale | Private Kaggle notebook output `drhaidarali/dentex-data` (one cached copy, attached by training) | `panoramic_monai`, original v1 notebooks, harmony_dental X-ray part (from Nov 2, 2026) |
 | ToothFairy2 | 480 CBCT scans, 42 labelled structures (jaws, nerve canals, sinuses, every tooth, crowns, implants) | ditto.ing.unimore.it/toothfairy2, owner's account | CC BY-SA 4.0 (in the dataset's `dataset.json`) | Yes, with credit. Share-alike: **VERIFY** with a lawyer whether models trained on it must also be CC BY-SA | Private Kaggle dataset `drhaidarali/toothfairy2` | `cbct_toothfairy2` (cbct-seg v1, 2026-10-31) |
 | v1-detector-data | Data behind the original v1 Faster R-CNN model (Cavity, Fillings, Implant, Impacted Tooth; 73 test images) | **VERIFY**: not recorded in this repo | **VERIFY** | **VERIFY** | Unknown | `ml/serve.py` model |
 
@@ -25,8 +25,8 @@ Releases or private Kaggle datasets listed here.
 | Bitewing annotations (shubhamskg) | Bitewing images + annotations | kaggle.com/datasets/shubhamskg/bitewing-datasets | Uploader states MIT; original source unknown: **VERIFY** | **VERIFY** | Attach directly on Kaggle | bitewing model |
 | MMDental | 1,000 periapical (RVG) + panoramic (OPG) X-rays, 21 classes, 12,000+ annotations | kaggle.com/datasets/suhrathtahra/dental-dataset | CC0 1.0 (public domain) per Kaggle | Yes | Kaggle copy checked 2026-10-31: 796 images only (OPG + Pa_XRays), **no annotations**. Labels must come from the authors' original release: **VERIFY** | not usable for supervised training yet |
 | Dental periapical (Roboflow mirror) | Periapical X-rays (Roboflow export) | kaggle.com/datasets/nadaaglan/dental-periapical-x-rays, original universe.roboflow.com/dent-dataset | CC BY 4.0 (original Roboflow README) | Yes, with credit | Attach directly on Kaggle | periapical model |
-| Periapical lesions PAI | Periapical lesion scores | huggingface.co/datasets/tirandazdylan/periapical-lesions-pai | CC BY 4.0 | Yes, with credit | Not yet copied | periapical model |
-| Caries bounding boxes | Caries boxes | huggingface.co/datasets/Frallex/Caries_Bounding_Box | MIT | Yes | Not yet copied | 2D caries |
+| Periapical lesions PAI | 3,863 PANORAMIC films with periapical lesion boxes graded PAI 3-5 (Do et al., Mendeley kx52tk2ddj.3) | huggingface.co/datasets/tirandazdylan/periapical-lesions-pai | CC BY 4.0 | Yes, with credit | Downloaded inside the training job | harmony_dental X-ray part (from Nov 2, 2026) |
+| Caries bounding boxes | 3,221 CLINICAL COLOUR PHOTOS of teeth with ICDAS caries grades D0-D6 (Roboflow export) | huggingface.co/datasets/Frallex/Caries_Bounding_Box | MIT | Yes | Not yet copied | harmony_dental photo part (planned) |
 
 Rejected for commercial use (NonCommercial licenses): Mendeley bitewing set,
 Teeth3DS, ToothFairy3, Bits2Bites, Bite2Text, IOP-Compass.

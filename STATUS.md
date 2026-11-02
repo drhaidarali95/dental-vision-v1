@@ -1,6 +1,6 @@
 # Live status (updated automatically every 2 hours)
 
-Last update: 2026-11-02 00:15 UTC
+Last update: 2026-11-02 01:30 UTC
 
 ## Now
 - Done Oct 30, 05:05 UTC: DENTEX private copy; ToothFairy2 checkpoints (4.6 GB) and scans (26.1 GB) saved privately.
@@ -23,6 +23,8 @@ Last update: 2026-11-02 00:15 UTC
 - Nov 1, 23:45 UTC: OWNER DECISION: ONE model for everything (harmony_dental/): one file harmony-dental.pt = X-ray part (one detector trained on ALL flat X-rays together: panoramic, periapical, bitewing, occlusal) + CBCT part; automatic routing by input type. No more per-film-type models. Next GPU job: harmony_dental X-ray part (kaggle/push_kaggle.sh on haydaralik, offline).
 
 - Nov 2, 00:12 UTC: 3 jobs RUNNING on haydaralik: harmony-dental-xray-train (ONE X-ray part, all flat X-rays, started Nov 1 23:37, 10.5 h cap, done ~10:30 UTC), harmony-cbct-train-v2 (CBCT part, done ~07:45 UTC), harmony-periapical-train (test run).
+
+- Nov 2, 01:30 UTC: harmony_dental X-ray part v2 adds DENTEX (findings + teeth) and 3,863 PAI panoramics (periapical lesions); runs on main account drhaidarali (internet on, DENTEX attached). Photo part data found: HF Frallex/Caries_Bounding_Box = 3,221 clinical photos, ICDAS D0-D6 (MIT). Periapical-only run to be stopped (owner request; needs KAGGLE2 token).
 
 ## Queue (runs in this order, one GPU job at a time)
 1. Panoramic v2 (robust) - findings + tooth numbering.

@@ -13,7 +13,7 @@ WORK = Path("/kaggle/working")
 os.environ.setdefault("HARMONY_LONG_SIDE", "1024")
 os.environ.setdefault("HARMONY_OVERSAMPLE", "Caries,Badly decayed,Deep caries,Root canal treatment,Periapical lesion")
 os.environ.setdefault("HARMONY_OVERSAMPLE_X", "3")
-os.environ.setdefault("HARMONY_HOURS", "10.5")
+os.environ.setdefault("HARMONY_HOURS", "9")
 
 
 def sh(*cmd):
@@ -32,7 +32,12 @@ else:
 w = next(inp.rglob("resnet50-11ad3fa6.pth"), None)
 if w:
     d = Path.home() / ".cache/torch/hub/checkpoints"; d.mkdir(parents=True, exist_ok=True); shutil.copy(w, d / w.name)
-sh(py, code / "prep_all_xray.py", "--input", inp, "--out", WORK / "data")
+try:
+    import pyarrow  # noqa: F401
+except ImportError:
+    sh(py, "-m", "pip", "install", "-q", "pyarrow")
+sh(py, code / "prep_extra.py", "--input", inp, "--out", WORK / "data_extra.json")
+sh(py, code / "prep_all_xray.py", "--input", inp, "--out", WORK / "data", "--extra", WORK / "data_extra.json")
 sh(py, code / "train.py", "--datalist", WORK / "data/datalist.json", "--out", WORK / "xray", "--epochs", "60", "--batch-size", "4")
 sh(py, code / "test_report.py", "--datalist", WORK / "data/datalist.json", "--model", WORK / "xray/best.pt", "--out", WORK / "report_xray_test.json")
 for t in sorted((WORK / "data").glob("test_*.json")):
