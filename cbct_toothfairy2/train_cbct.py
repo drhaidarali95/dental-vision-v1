@@ -65,19 +65,34 @@ def load(p: Path):
     return img, z["lab"]
 
 
-def crop(img, lab, fg_prob=0.7):
+_POINTS = {}
+
+
+def class_points(key, lab, per_class=400):
+    """Sampled voxel coordinates for each structure, computed once per scan (fast class balancing)."""
+    if key not in _POINTS:
+        idx = np.flatnonzero(lab)
+        vals = lab.ravel()[idx]
+        rng = np.random.default_rng(len(idx))
+        pts = {}
+        for c in np.unique(vals):
+            sel = idx[vals == c]
+            if len(sel) > per_class:
+                sel = rng.choice(sel, per_class, replace=False)
+            pts[int(c)] = np.stack(np.unravel_index(sel, lab.shape), 1)
+        _POINTS[key] = pts
+    return _POINTS[key]
+
+
+def crop(img, lab, fg_prob=0.7, key=None):
     pad = [(0, max(0, P - s)) for P, s in zip(PATCH, img.shape)]
     img, lab = np.pad(img, pad), np.pad(lab, pad)
-    if random.random() < fg_prob and lab.any():
-        # Class-balanced: pick a structure uniformly, then a voxel of it, so small
+    pts = class_points(key, lab) if key is not None else None
+    if random.random() < fg_prob and pts:
+        # Class-balanced: pick a structure uniformly, then one of its voxels, so small
         # or rare structures (upper teeth, sinuses) are seen as often as the jaw.
-        present = np.unique(lab[::4, ::4, ::4]); present = present[present > 0]
-        cls = random.choice(list(present)) if len(present) else None
-        zz, yy, xx = np.nonzero(lab == cls) if cls is not None else np.nonzero(lab)
-        if len(zz) == 0:
-            zz, yy, xx = np.nonzero(lab)
-        i = random.randrange(len(zz))
-        c = (zz[i], yy[i], xx[i])
+        cpts = pts[random.choice(list(pts))]
+        c = tuple(cpts[random.randrange(len(cpts))])
     else:
         c = tuple(random.randrange(s) for s in img.shape)
     start = [min(max(0, ci - P // 2), s - P) for ci, P, s in zip(c, PATCH, img.shape)]
@@ -159,7 +174,10 @@ def main():
         model.train()
         t0, losses = time.time(), []
         for _ in range(250):  # one "epoch" = 250 patches of batch 2
-            batch = [crop(*load(random.choice(train))) for _ in range(2)]
+            batch = []
+            for _ in range(2):
+                pth = random.choice(train)
+                batch.append(crop(*load(pth), key=str(pth)))
             x = torch.from_numpy(np.stack([b[0] for b in batch]))[:, None].to(dev)
             y = torch.from_numpy(np.stack([b[1] for b in batch]).astype(np.int64))[:, None].to(dev)
             if random.random() < 0.5:  # intensity jitter for scanner variety
