@@ -13,7 +13,8 @@ WORK = Path("/kaggle/working")
 os.environ.setdefault("HARMONY_LONG_SIDE", "1024")
 os.environ.setdefault("HARMONY_OVERSAMPLE", "Caries,Badly decayed,Deep caries,Root canal treatment,Periapical lesion")
 os.environ.setdefault("HARMONY_OVERSAMPLE_X", "3")
-os.environ.setdefault("HARMONY_HOURS", "9")
+os.environ.setdefault("HARMONY_HOURS", "8")
+os.environ.setdefault("HARMONY_REQUIRE_GPU", "1")
 
 
 def sh(*cmd):
@@ -38,7 +39,7 @@ except ImportError:
     sh(py, "-m", "pip", "install", "-q", "pyarrow")
 sh(py, code / "prep_extra.py", "--input", inp, "--out", WORK / "data_extra.json")
 sh(py, code / "prep_all_xray.py", "--input", inp, "--out", WORK / "data", "--extra", WORK / "data_extra.json")
-sh(py, code / "train.py", "--datalist", WORK / "data/datalist.json", "--out", WORK / "xray", "--epochs", "60", "--batch-size", "4")
+sh(py, code / "train.py", "--datalist", WORK / "data/datalist.json", "--out", WORK / "xray", "--epochs", "60", "--batch-size", "4", "--workers", "4", "--val-every", "3")
 sh(py, code / "test_report.py", "--datalist", WORK / "data/datalist.json", "--model", WORK / "xray/best.pt", "--out", WORK / "report_xray_test.json")
 for t in sorted((WORK / "data").glob("test_*.json")):
     sh(py, code / "test_report.py", "--datalist", t, "--model", WORK / "xray/best.pt", "--out", WORK / f"report_{t.stem}.json")

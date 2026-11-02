@@ -125,6 +125,9 @@ def main():
     torch.manual_seed(0)
     random.seed(0)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    print(f"device: {device} ({torch.cuda.get_device_name(0) if device.type == 'cuda' else 'NO GPU'})", flush=True)
+    if device.type != "cuda" and os.environ.get("HARMONY_REQUIRE_GPU"):
+        raise SystemExit("no GPU visible: refusing to train on CPU")
     data = json.loads(args.datalist.read_text())
     classes = data["classes"]
     if not classes or not all(isinstance(c, str) for c in classes):
@@ -177,7 +180,10 @@ def main():
             break
         detector.train()
         started, total = time.time(), 0.0
-        for images, targets in loader:
+        for step_i, (images, targets) in enumerate(loader, 1):
+            if deadline and time.time() > deadline:
+                print(f"time budget reached inside epoch {epoch} at step {step_i}; stopping", flush=True)
+                break
             images = [x.to(device) for x in images]
             targets = [{k: v.to(device) for k, v in t.items()} for t in targets]
             with torch.autocast(device.type, enabled=use_amp):
@@ -191,9 +197,12 @@ def main():
             scaler.update()
             sched.step()
             total += float(loss.detach())
+            if step_i % 100 == 0:
+                print(f"epoch {epoch} step {step_i}/{len(loader)} loss {total / step_i:.4f} {time.time() - started:.0f}s", flush=True)
         row = {"epoch": epoch, "loss": total / max(1, len(loader)), "seconds": round(time.time() - started)}
 
-        if epoch % args.val_every == 0 or epoch == args.epochs:
+        out_of_time = bool(deadline and time.time() > deadline)
+        if epoch % args.val_every == 0 or epoch == args.epochs or out_of_time:
             metrics, _ = evaluate(detector, val_items, device)
             row["val_mAP_50"] = metrics["mAP_50"]
             if metrics["mAP_50"] > best:
@@ -210,6 +219,8 @@ def main():
         Path(str(resume) + ".tmp").replace(resume)
         (args.out / "history.json").write_text(json.dumps(history, indent=2))
         print(json.dumps(row), flush=True)
+        if out_of_time:
+            break
     print(f"best val mAP@0.5 = {best:.4f} -> {args.out / 'best.pt'}")
 
 
