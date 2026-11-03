@@ -180,7 +180,11 @@ def main():
     resume = args.out / "resume.pt"
     if resume.exists():
         state = torch.load(resume, map_location="cpu", weights_only=False)
-        detector.network.load_state_dict(state["network"])
+        own = detector.network.state_dict()
+        same = {k: v for k, v in state["network"].items() if k in own and own[k].shape == v.shape}
+        detector.network.load_state_dict(same, strict=False)
+        if len(same) < len(own):
+            print(f"warm start: {len(same)}/{len(own)} tensors loaded (class list grew; new heads start fresh)", flush=True)
         if os.environ.get("HARMONY_FRESH_SCHEDULE") == "1":
             # New run = new full cosine schedule over args.epochs (warm start from the weights):
             # every run ends with low-learning-rate fine-tuning instead of stopping mid-schedule.
