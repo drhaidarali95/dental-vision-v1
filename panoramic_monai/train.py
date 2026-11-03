@@ -151,8 +151,21 @@ def main():
         train_items, val_items = train_items[: args.max_items], val_items[: args.max_items]
     print(f"train {len(train_items)} expert + {len(drafts)} draft images, val {len(val_items)}", flush=True)
 
-    loader = DataLoader(Films(train_items + drafts, augment=True, mirror=mirror), batch_size=args.batch_size, shuffle=True,
-                        num_workers=args.workers, collate_fn=collate, drop_last=len(train_items + drafts) > args.batch_size)
+    all_items = train_items + drafts
+    sampler = None
+    if os.environ.get("HARMONY_BALANCE") == "source":
+        # Equal share per data source (film type / dataset), so one big source (e.g. bitewing
+        # tooth numbering) cannot dominate; rare-finding films are already repeated above.
+        from collections import Counter
+        from torch.utils.data import WeightedRandomSampler
+        counts = Counter(it.get("source", "?") for it in all_items)
+        weights = [1.0 / counts[it.get("source", "?")] for it in all_items]
+        n = int(os.environ.get("HARMONY_EPOCH_SAMPLES", len(all_items)))
+        sampler = WeightedRandomSampler(weights, num_samples=n, replacement=True)
+        print(f"balanced sampling over {dict(counts)}; {n} films per epoch", flush=True)
+    loader = DataLoader(Films(all_items, augment=True, mirror=mirror), batch_size=args.batch_size,
+                        shuffle=sampler is None, sampler=sampler,
+                        num_workers=args.workers, collate_fn=collate, drop_last=len(all_items) > args.batch_size)
     detector = build_detector(pretrained_backbone=not args.no_pretrained, classes=classes).to(device)
     optimizer = torch.optim.AdamW(detector.network.parameters(), lr=args.lr, weight_decay=1e-4)
     steps = max(1, args.epochs * len(loader))
@@ -168,11 +181,17 @@ def main():
     if resume.exists():
         state = torch.load(resume, map_location="cpu", weights_only=False)
         detector.network.load_state_dict(state["network"])
-        optimizer.load_state_dict(state["optimizer"])
-        sched.load_state_dict(state["sched"])
-        scaler.load_state_dict(state["scaler"])
-        best, history, first = state["best"], state["history"], state["epoch"] + 1
-        print(f"resuming after epoch {state['epoch']} (best val mAP@0.5 {best:.4f})", flush=True)
+        if os.environ.get("HARMONY_FRESH_SCHEDULE") == "1":
+            # New run = new full cosine schedule over args.epochs (warm start from the weights):
+            # every run ends with low-learning-rate fine-tuning instead of stopping mid-schedule.
+            history = state["history"]
+            print(f"warm start from epoch {state['epoch']} weights; fresh {args.epochs}-epoch schedule", flush=True)
+        else:
+            optimizer.load_state_dict(state["optimizer"])
+            sched.load_state_dict(state["sched"])
+            scaler.load_state_dict(state["scaler"])
+            best, history, first = state["best"], state["history"], state["epoch"] + 1
+            print(f"resuming after epoch {state['epoch']} (best val mAP@0.5 {best:.4f})", flush=True)
     deadline = time.time() + float(os.environ.get("HARMONY_HOURS", "0")) * 3600 if os.environ.get("HARMONY_HOURS") else None
     for epoch in range(first, args.epochs + 1):
         if deadline and time.time() > deadline:

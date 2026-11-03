@@ -15,6 +15,10 @@ os.environ.setdefault("HARMONY_OVERSAMPLE", "Caries,Badly decayed,Deep caries,Ro
 os.environ.setdefault("HARMONY_OVERSAMPLE_X", "3")
 os.environ.setdefault("HARMONY_HOURS", "8")
 os.environ.setdefault("HARMONY_REQUIRE_GPU", "1")
+os.environ.setdefault("HARMONY_BALANCE", "source")
+os.environ.setdefault("HARMONY_EPOCH_SAMPLES", "5000")
+os.environ.setdefault("HARMONY_FRESH_SCHEDULE", "1")
+EPOCHS = os.environ.get("HARMONY_EPOCHS", "14")
 
 
 def sh(*cmd):
@@ -113,7 +117,7 @@ if prev and os.environ.get("HARMONY_CONTINUE", "1") == "1":
     print("continuing from", prev, flush=True)
 sh(py, code / "prep_extra.py", "--input", Path("/kaggle"), "--out", WORK / "data_extra.json")
 sh(py, code / "prep_all_xray.py", "--input", inp, "--out", WORK / "data", "--extra", WORK / "data_extra.json")
-sh(py, code / "train.py", "--datalist", WORK / "data/datalist.json", "--out", WORK / "xray", "--epochs", "60", "--batch-size", "4", "--workers", "4", "--val-every", "3")
+sh(py, code / "train.py", "--datalist", WORK / "data/datalist.json", "--out", WORK / "xray", "--epochs", EPOCHS, "--batch-size", "4", "--workers", "4", "--val-every", "2")
 sh(py, code / "test_report.py", "--datalist", WORK / "data/datalist.json", "--model", WORK / "xray/best.pt", "--out", WORK / "report_xray_test.json")
 for t in sorted((WORK / "data").glob("test_*.json")):
     sh(py, code / "test_report.py", "--datalist", t, "--model", WORK / "xray/best.pt", "--out", WORK / f"report_{t.stem}.json")
