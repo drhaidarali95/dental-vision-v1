@@ -12,7 +12,7 @@ esac
 # Main account (internet on) also attaches the private DENTEX copy.
 if [ "$U" = "drhaidarali" ]; then NET=true; KSRC="\"drhaidarali/dentex-data\""; else NET=${NET:-true}; KSRC=""; fi
 S=$(mktemp -d); mkdir -p "$S/code" "$S/kernel"
-cp ../panoramic_monai/*.py ../periapical_monai/*.py ./*.py "$S/code/"
+cp ../panoramic_monai/*.py ../periapical_monai/*.py ./*.py perio/*.py "$S/code/"
 echo "{\"title\": \"harmony-dental-code\", \"id\": \"$DATASET\", \"licenses\": [{\"name\": \"other\"}]}" > "$S/code/dataset-metadata.json"
 if kaggle datasets status "$DATASET" >/dev/null 2>&1; then kaggle datasets version -p "$S/code" -m "code $(date -u +%FT%TZ)" -q; else kaggle datasets create -p "$S/code" -q; fi
 cp kaggle/kernel.py "$S/kernel/kernel.py"

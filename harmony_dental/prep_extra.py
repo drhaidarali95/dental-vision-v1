@@ -76,6 +76,32 @@ def pai(inp: Path, work: Path):
     return out
 
 
+DENPAR_URL = "https://zenodo.org/records/16645076/files/DenPAR%20Radiographs%20Dataset.zip?download=1"
+
+
+def denpar(inp: Path, work: Path):
+    """DenPAR periapicals (CC BY 4.0): CEJ / root apex / bone crest landmarks for perio charting."""
+    import zipfile
+    try:
+        from prep_denpar import load_split
+    except ImportError:
+        sys.path.insert(0, str(Path(__file__).resolve().parent / "perio")); from prep_denpar import load_split
+    root = next(inp.rglob("Key Points Annotations"), None)
+    if root is None:
+        z = work / "denpar.zip"
+        try:
+            import urllib.request
+            urllib.request.urlretrieve(DENPAR_URL, z)
+            zipfile.ZipFile(z).extractall(work / "denpar"); z.unlink()
+            root = next((work / "denpar").rglob("Key Points Annotations"))
+        except Exception as e:
+            print("DenPAR not available:", e, flush=True); return {"train": [], "val": [], "test": []}
+    ds = root.parent.parent
+    out = {"train": load_split(ds / "Training"), "val": load_split(ds / "Validation"), "test": load_split(ds / "Testing")}
+    print("DenPAR:", {k: len(v) for k, v in out.items()}, flush=True)
+    return out
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--input", type=Path, default=Path("/kaggle/input"))
@@ -84,7 +110,7 @@ def main():
     a = ap.parse_args()
     a.work.mkdir(parents=True, exist_ok=True)
     total = {"train": [], "val": [], "test": []}
-    for part in (dentex(a.input), pai(a.input, a.work)):
+    for part in (dentex(a.input), pai(a.input, a.work), denpar(a.input, a.work)):
         for k in total:
             total[k] += part[k]
     a.out.write_text(json.dumps(total))

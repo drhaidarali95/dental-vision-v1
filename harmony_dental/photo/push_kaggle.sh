@@ -4,7 +4,7 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 U=$(kaggle config view 2>/dev/null | awk -F': ' '/username/{print $2}' | tr -d ' ')
 S=$(mktemp -d); mkdir -p "$S/code" "$S/kernel"
-cp ../panoramic_monai/*.py ../periapical_monai/*.py ./*.py "$S/code/"
+cp ../panoramic_monai/*.py ../periapical_monai/*.py ./*.py perio/*.py "$S/code/"
 echo "{\"title\": \"harmony-dental-code\", \"id\": \"$U/harmony-dental-code\", \"licenses\": [{\"name\": \"other\"}]}" > "$S/code/dataset-metadata.json"
 kaggle datasets version -p "$S/code" -m "code $(date -u +%FT%TZ)" -q || kaggle datasets create -p "$S/code" -q
 cp photo/kernel.py "$S/kernel/kernel.py"
