@@ -27,6 +27,17 @@ def sh(*cmd):
 
 
 inp = Path("/kaggle/input")
+# Fail fast (seconds, not hours) if Kaggle gave this session no GPU.
+_gpu = subprocess.run(["nvidia-smi", "-L"], capture_output=True, text=True)
+print("GPU:", _gpu.stdout.strip() or "NONE", flush=True)
+if _gpu.returncode != 0 and os.environ.get("HARMONY_REQUIRE_GPU"):
+    sys.exit("no GPU in this Kaggle session (account not phone-verified, or GPU quota used up)")
+import socket
+try:
+    socket.create_connection(("zenodo.org", 443), timeout=10).close(); ONLINE = True
+except OSError:
+    ONLINE = False
+print("internet:", ONLINE, flush=True)
 code = next(inp.rglob("prep_all_xray.py")).parent
 py = sys.executable
 whl = next(inp.rglob("monai-*.whl"), None)
@@ -106,6 +117,8 @@ def fetch_dentex():
 
 
 try:
+    if not ONLINE and next(inp.rglob("quadrant-enumeration-disease"), None) is None:
+        raise RuntimeError("offline")
     fetch_dentex()
 except Exception as e:  # no internet and no cached copy: train without DENTEX
     print("DENTEX not available:", e, flush=True)
