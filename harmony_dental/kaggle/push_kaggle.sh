@@ -10,7 +10,7 @@ case "${1:-push}" in
   fetch) mkdir -p "${OUT:-runs/kaggle}"; kaggle kernels output "$KERNEL" -p "${OUT:-runs/kaggle}"; exit ;;
 esac
 # Main account (internet on) also attaches the private DENTEX copy.
-if [ "$U" = "drhaidarali" ]; then NET=true; KSRC="\"drhaidarali/dentex-data\""; else NET=false; KSRC=""; fi
+if [ "$U" = "drhaidarali" ]; then NET=true; KSRC="\"drhaidarali/dentex-data\""; else NET=${NET:-true}; KSRC=""; fi
 S=$(mktemp -d); mkdir -p "$S/code" "$S/kernel"
 cp ../panoramic_monai/*.py ../periapical_monai/*.py ./*.py "$S/code/"
 echo "{\"title\": \"harmony-dental-code\", \"id\": \"$DATASET\", \"licenses\": [{\"name\": \"other\"}]}" > "$S/code/dataset-metadata.json"
@@ -19,7 +19,7 @@ cp kaggle/kernel.py "$S/kernel/kernel.py"
 cat > "$S/kernel/kernel-metadata.json" <<META
 {"id": "$KERNEL", "title": "harmony-dental-xray-train", "code_file": "kernel.py", "language": "python",
  "kernel_type": "script", "is_private": true, "enable_gpu": true, "enable_internet": $NET,
- "dataset_sources": ["$DATASET", "$U/harmony-wheels", "$U/harmony-resnet50", "nadaaglan/dental-periapical-x-rays", "imtkaggleteam/dental-radiography", "sprss96/bitewing-dataset"],
+ "dataset_sources": ["$DATASET", "$U/harmony-wheels", "$U/harmony-resnet50", ${EXTRA_DS:-}"nadaaglan/dental-periapical-x-rays", "imtkaggleteam/dental-radiography", "sprss96/bitewing-dataset"],
  "competition_sources": [], "kernel_sources": [$KSRC]}
 META
 sleep 30
