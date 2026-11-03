@@ -25,3 +25,6 @@ separate from the Harmony app so it can be moved, licensed or sold on its own.
 - Timing in every message, status and report is a specific clock time with date and time zone (e.g. "Oct 30, 11:40 UTC"), never only a duration like "about 5 hours". Give both when useful: "finishes about Oct 30, 11:40 UTC (~5 h)".
 - Always report held-out test scores. Never claim or imply 100% accuracy or
   clinical validation.
+
+## Time zone (owner, Nov 3 2026)
+Always report times to the owner in US Pacific time (PT, e.g. "5:00 AM PST"), never UTC. Internal logs may keep UTC.
