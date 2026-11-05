@@ -70,3 +70,14 @@ CC BY 4.0).
 ToothFairy2 requires citing three papers on any publication or product page
 (see the ToothFairy2 site, "If you use our dataset, you must cite").
 DENTEX: cite the DENTEX challenge paper.
+
+## X-ray candidate 2 (Colab T4, 14 epochs warm from cand-1, finished ~1:55 AM PST Nov 4) — NOT promoted
+| Test set | Cand 2 | Best | Δ |
+|---|---|---|---|
+| Bitewing teeth | 0.786 | 0.80 | -0.014 |
+| Periapical | 0.536 | 0.517 | +0.019 |
+| Pano restorations | 0.777 | 0.74 | +0.037 |
+| DENTEX findings | 0.460 | 0.544 | -0.084 |
+| DENTEX teeth | 0.813 | 0.96 (diff split) | — |
+| PAI periapical lesions (new) | 0.642 | — | new |
+Fails never-degrade (DENTEX findings, bitewing). Weights kept in Drive Harmony training/xray (resume.pt). Next X-ray round: oversample DENTEX caries/deep caries.
